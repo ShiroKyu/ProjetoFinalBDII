@@ -1,29 +1,33 @@
 <template>
-  <div id="nav">
+  <!-- <div id="nav">
     <router-link to="/" msg="Paulo">Home</router-link> |
     <router-link to="/login">About</router-link>
   </div>
+  <router-view /> -->
+
   <router-view />
 </template>
 
 <script>
-// import HelloWorld from './components/Home.vue';
-
 export default {
   name: 'App',
-  // components: {
-  //   HelloWorld,
-  // },
 };
 </script>
 
 <style>
+:root {
+  --purple-color: #6c63ff;
+}
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+  display: flex;
+  width: 100vw;
+  height: 100vh;
 }
 </style>

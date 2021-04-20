@@ -4,14 +4,16 @@
 
     <section class="login-field">
       <form class="login-form">
-        <h1>Login</h1>
+        <h1>Registre-se</h1>
 
-        <input type="text" placeholder="Username" class="login-user" />
-        <input type="password" placeholder="Password" class="login-pass" />
-
+        <input type="text" placeholder="Usuário" class="login-user" />
+        <input type="email" placeholder="Email" class="login-user" />
+        <input type="text" placeholder="Matrícula" class="login-user" />
+        <input type="password" placeholder="Senha" class="login-pass" />
+        <label for="data-nasc"
+          >Data de nascimento: <input id="data-nasc" type="date" placeholder="data"
+        /></label>
         <button type="submit" class="login-btn">Entrar</button>
-
-        <router-link to="/register"><a class="reg-link">Criar uma conta -></a></router-link>
       </form>
     </section>
   </router-view>
@@ -19,7 +21,7 @@
 
 <script>
 export default {
-  name: 'Login',
+  name: 'Register',
 };
 </script>
 
@@ -84,21 +86,11 @@ export default {
 }
 
 .login-user {
-  margin: 20px auto 0;
+  margin: 10px auto 0;
 }
 
 .login-pass {
   margin: 10px auto 10px;
-}
-
-.reg-link {
-  text-decoration: none;
-  color: #938989;
-  transition: all 2s ease;
-}
-
-.reg-link:hover {
-  text-decoration: underline;
 }
 
 .login-btn {
@@ -114,15 +106,15 @@ export default {
   width: 30%;
   height: 6%;
 
-  background-color: var(--purple-color);
+  background-color: #ff6584;
 
-  color: #ffffff;
+  color: #ffb9b9;
 
-  transition: background-color 0.6s ease-out;
+  transition: background-color 0.3s ease-out;
 }
 
 .login-btn:hover {
-  background-color: #4742ae;
+  background-color: #f33f63;
 }
 
 ::-webkit-input-placeholder {
