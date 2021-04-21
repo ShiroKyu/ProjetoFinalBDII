@@ -24,5 +24,6 @@ module.exports = {
     'jest/prefer-to-have-length': 'warn',
     'jest/valid-expect': 'error',
     'import/first': 0,
+    'no-param-reassign': 0,
   },
 };
