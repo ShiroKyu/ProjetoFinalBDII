@@ -1,20 +1,31 @@
 <template>
   <router-view>
-    <section>
-      <div class="main">
-        <div class="perfil" v-for="(perfil, index) in informacoes_perfil" :key="index">
-          <div>
-            <img class="perfil_img" :src="perfil.foto_url" alt="Foto aluno" />
-          </div>
-          <div class="perfil_informacoes">
-            <h2>{{ perfil.nome }}</h2>
-            <p>{{ perfil.matricula }}</p>
-            <p>{{ perfil.curso }}</p>
-            <p>{{ perfil.campus }}</p>
-            <p>{{ perfil.situacao }}</p>
-          </div>
+    <section class="main">
+      <section class="left-section">
+        <div class="back-img"></div>
+
+        <router-link class="back-link" to="/register"><a>&#8592; Voltar</a></router-link>
+
+        <div class="profile-img-container">
+          <div class="profile-img"></div>
         </div>
-      </div>
+
+        <div class="update-password">
+          <img width="30" height="30" src="../../public/img/lock.png" />
+          <p>Alterar senha</p>
+        </div>
+      </section>
+
+      <section class="right-section">
+        <div class="student-info">
+          <h2>Dados do estudante</h2>
+          <p><b>Nome</b>: pasuddas</p>
+          <p><b>E-mail</b>: pasuddas</p>
+          <p><b>Matrícula</b>: pasuddas</p>
+          <p><b>Situação</b>: pasuddas</p>
+          <p><b>Curso</b>: pasuddas</p>
+        </div>
+      </section>
     </section>
   </router-view>
 </template>
@@ -37,26 +48,129 @@ export default {
   name: 'Perfil',
 };
 </script>
+
 <style scoped>
 .main {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: #6c63ff;
-  height: 100vh;
-  width: 100vw;
+
+  height: 100%;
+  width: 100%;
+
+  font-family: 'Quicksand', sans-serif;
+  font-weight: 400;
 }
-.perfil {
+.left-section,
+.right-section {
+  width: 50%;
+  height: 100%;
+
   display: flex;
-  flex-direction: row;
-  background-color: rgba(255, 255, 255, 0.5);
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
 }
-.perfil_informacoes {
-  margin-top: 15px;
-  margin-right: 25px;
+
+.left-section {
+  position: relative;
+  color: #ffffff;
 }
-.perfil_img {
-  width: 150px;
-  margin: 15px;
+
+.back-img {
+  background-image: url('/img/ifpb.89f4ef8e.jpg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center center;
+
+  filter: grayscale(100%) brightness(0.5);
+
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  z-index: -999;
+}
+
+.back-link {
+  align-self: flex-start;
+
+  text-decoration: none;
+
+  position: absolute;
+
+  top: 30px;
+  left: 25px;
+  color: white;
+
+  transition: all 1s ease;
+}
+
+.back-link:hover {
+  text-decoration: underline;
+}
+
+.right-section {
+  background-color: #ffffff;
+}
+
+.student-info {
+  width: 100%;
+
+  padding: 30px;
+
+  text-align: center;
+
+  border: 1px solid rgb(255, 255, 255);
+  box-shadow: 2px 2px 6px black;
+
+  background-color: #ffffff;
+}
+
+.student-info h2 {
+  margin-bottom: 2rem;
+}
+
+.student-info p {
+  padding: 8px;
+}
+
+.profile-img-container {
+  width: 200px;
+  height: 200px;
+}
+
+.profile-img {
+  background-image: url('../../public/img/undraw_female_avatar_w3jk.svg');
+  background-size: cover;
+  background-repeat: no-repeat;
+  width: 100%;
+  height: 100%;
+
+  box-shadow: 2px 2px 6px black;
+  border-radius: 50%;
+}
+
+.update-password {
+  background-color: #6c63ffa1;
+  border-radius: 50%;
+
+  width: 100px;
+  height: 100px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  cursor: pointer;
+  transition: background-color 0.7s ease;
+
+  color: #000000;
+}
+
+.update-password:hover {
+  background-color: var(--purple-color);
+}
+
+.update-password p {
+  font-size: 0.8rem;
 }
 </style>

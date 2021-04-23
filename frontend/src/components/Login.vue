@@ -3,11 +3,11 @@
     <section class="login-cover"></section>
 
     <section class="login-field">
-      <form class="login-form">
+      <form class="login-form" method="POST" @submit.prevent="getRes">
         <h1>Login</h1>
 
-        <input type="text" placeholder="Username" class="login-user" />
-        <input type="password" placeholder="Password" class="login-pass" />
+        <input type="email" placeholder="E-mail" class="login-user" v-model="email" />
+        <input type="password" placeholder="Senha" class="login-pass" v-model="password" />
 
         <button type="submit" class="login-btn">Entrar</button>
 
@@ -18,8 +18,42 @@
 </template>
 
 <script>
+import axios from 'axios';
+
 export default {
   name: 'Login',
+
+  data() {
+    return {
+      res: [],
+      email: '',
+      password: '',
+    };
+  },
+
+  methods: {
+    getRes() {
+      const vue = this;
+
+      axios
+        .post('http://localhost:3333/auth/login', {
+          email: vue.email,
+          password: vue.password,
+        })
+        .then((response) => {
+          if (response.status === 200) {
+            this.$router.push({ path: '/home' });
+          }
+        })
+        .catch(() => {
+          this.$router.push({ path: '/perfil' });
+        });
+    },
+  },
+
+  beforeMount() {
+    localStorage.removeItem('teste');
+  },
 };
 </script>
 
@@ -29,7 +63,7 @@ export default {
   width: 50%;
   height: 100%;
   background-color: #6c63ff;
-  background-image: url('../../public/img/undraw_secure_login_pdn4.svg');
+  background-image: url('../../public/img/undraw_authentication_fsn5.svg');
   background-size: 70%;
   background-repeat: no-repeat;
   background-position: center center;

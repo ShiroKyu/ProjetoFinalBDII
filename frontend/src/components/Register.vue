@@ -3,16 +3,16 @@
     <section class="login-cover"></section>
 
     <section class="login-field">
-      <form class="login-form">
+      <form class="login-form" method="POST" @submit.prevent="getRes">
         <h1>Registre-se</h1>
 
-        <input type="text" placeholder="Usuário" class="login-user" />
-        <input type="email" placeholder="Email" class="login-user" />
-        <input type="text" placeholder="Matrícula" class="login-user" />
-        <input type="password" placeholder="Senha" class="login-pass" />
-        <label for="data-nasc"
+        <!-- <input type="text" placeholder="Usuário" class="login-user" /> -->
+        <input type="email" placeholder="Email" class="login-user" v-model="email" />
+        <input type="text" placeholder="Matrícula" class="login-user" v-model="matricula" />
+        <input type="password" placeholder="Senha" class="login-pass" v-model="password" />
+        <!-- <label for="data-nasc"
           >Data de nascimento: <input id="data-nasc" type="date" placeholder="data"
-        /></label>
+        /></label> -->
         <button type="submit" class="login-btn">Entrar</button>
       </form>
     </section>
@@ -20,8 +20,43 @@
 </template>
 
 <script>
+import axios from 'axios';
+// 20151001001
 export default {
   name: 'Register',
+
+  data() {
+    return {
+      res: [],
+      email: '',
+      password: '',
+      matricula: '',
+    };
+  },
+
+  methods: {
+    getRes() {
+      const vue = this;
+
+      axios
+        .post('http://localhost:3333/auth/register', {
+          email: vue.email,
+          password: vue.password,
+          matricula: vue.matricula,
+        })
+        .then((response) => {
+          if (response.status === 200) {
+            console.log('Criado com sucesso!');
+            this.$router.push({ path: '/login' });
+          }
+        })
+        .catch((e) => {
+          console.log(e);
+          console.log('falhou');
+          this.$router.push({ path: '/perfil' });
+        });
+    },
+  },
 };
 </script>
 
@@ -30,7 +65,7 @@ export default {
 .login-cover {
   width: 50%;
   height: 100%;
-  background-color: #6c63ff;
+  background-color: var(--purple-color);
   background-image: url('../../public/img/undraw_secure_login_pdn4.svg');
   background-size: 70%;
   background-repeat: no-repeat;

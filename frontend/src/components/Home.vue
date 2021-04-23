@@ -1,17 +1,9 @@
 <template>
-  <h1>Home route</h1>
-  <p v-if="res.length === 0">Carregando.....</p>
-  <ul v-else>
-    <li :key="index" v-for="(people, index) in res">
-      <p>{{ people.name }}</p>
-      <p>{{ people.email }}</p>
-      <hr />
-    </li>
-  </ul>
+  <h1>Rota principal</h1>
 </template>
 
 <script>
-import axios from 'axios';
+// import axios from 'axios';
 
 export default {
   name: 'Home',
@@ -22,20 +14,9 @@ export default {
     };
   },
 
-  methods: {
-    getRes() {
-      const vue = this;
+  methods: {},
 
-      axios.get('https://jsonplaceholder.typicode.com/users').then((response) => {
-        vue.res = response.data;
-        console.log(vue.res);
-      });
-    },
-  },
-
-  mounted() {
-    this.getRes();
-  },
+  mounted() {},
 
   // watch: {
   //   response(newValue, oldValue) {},
