@@ -19,6 +19,7 @@
 
 <script>
 import axios from 'axios';
+import { useToast } from 'vue-toastification';
 
 export default {
   name: 'Login',
@@ -28,7 +29,25 @@ export default {
       res: [],
       email: '',
       password: '',
+      token: '',
+      // logged: false,
     };
+  },
+  setup() {
+    // Get toast interface
+    const toast = useToast();
+
+    // // Use it!
+    // toast("I'm a toast!");
+
+    // or with options
+    // toast.success('My toast content', {
+    //   timeout: 4000,
+    // });
+    // These options will override the options defined in the "app.use" plugin registration for this specific toast
+
+    // Make it available inside methods
+    return { toast };
   },
 
   methods: {
@@ -43,21 +62,36 @@ export default {
         .then((response) => {
           if (response.status === 200) {
             this.$router.push({ path: '/home' });
+            this.toast.success('Logado!', {
+              timeout: 4000,
+            });
           }
         })
         .catch(() => {
-          this.$router.push({ path: '/perfil' });
+          this.toast.error('Login inválido', {
+            timeout: 4000,
+          });
         });
     },
   },
 
-  beforeMount() {
-    localStorage.removeItem('teste');
+  created() {
+    const vue = this;
+
+    axios
+      .get('http://localhost:3333/auth/checklogin')
+      .then((response) => {
+        if (response.status === 200) {
+          this.$router.push({ path: '/home' });
+        }
+      })
+      .catch(() => {
+        vue.$data.logged = false;
+      });
   },
 };
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 .login-cover {
   width: 50%;

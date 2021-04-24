@@ -4,7 +4,7 @@
       <section class="left-section">
         <div class="back-img"></div>
 
-        <router-link class="back-link" to="/register"><a>&#8592; Voltar</a></router-link>
+        <router-link class="back-link" to="/home"><a>&#8592; Voltar</a></router-link>
 
         <div class="profile-img-container">
           <div class="profile-img"></div>
@@ -19,33 +19,45 @@
       <section class="right-section">
         <div class="student-info">
           <h2>Dados do estudante</h2>
-          <p><b>Nome</b>: pasuddas</p>
-          <p><b>E-mail</b>: pasuddas</p>
-          <p><b>Matrícula</b>: pasuddas</p>
-          <p><b>Situação</b>: pasuddas</p>
-          <p><b>Curso</b>: pasuddas</p>
+          <p><b>Nome</b>: {{ informacoes_perfil.nome }}</p>
+          <p><b>E-mail</b>: {{ informacoes_perfil.email }}</p>
+          <p><b>Matrícula</b>: {{ informacoes_perfil.matricula }}</p>
+          <p><b>Situação</b>: {{ informacoes_perfil.situacao }}</p>
+          <p><b>Curso</b>: {{ informacoes_perfil.curso }}</p>
         </div>
       </section>
     </section>
   </router-view>
 </template>
 <script>
+import axios from 'axios';
+
 export default {
+  name: 'Perfil',
   data() {
     return {
-      informacoes_perfil: [
-        {
-          nome: 'Lulu',
-          matricula: '123123',
-          curso: 'ADS',
-          campus: 'Cajazeiras - Paraíba',
-          situacao: 'Matriculada',
-          foto_url: 'https://bityli.com/j1zBy',
-        },
-      ],
+      informacoes_perfil: {
+        nome: '',
+        email: '',
+        matricula: '',
+        curso: '',
+        situacao: '',
+        cota: '',
+        foto_url: 'https://bityli.com/j1zBy',
+      },
     };
   },
-  name: 'Perfil',
+
+  created() {
+    const vue = this;
+
+    axios.get('http://localhost:3333/auth/checklogin').then((response) => {
+      if (response.status === 200) {
+        vue.$data.informacoes_perfil = response.data;
+        this.$router.push({ path: '/perfil' });
+      }
+    });
+  },
 };
 </script>
 
@@ -76,7 +88,7 @@ export default {
 }
 
 .back-img {
-  background-image: url('/img/ifpb.89f4ef8e.jpg');
+  background-image: url('/img/ifpb.jpg');
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center center;

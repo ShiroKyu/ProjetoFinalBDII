@@ -57,6 +57,19 @@ export default {
         });
     },
   },
+
+  created() {
+    axios
+      .get('http://localhost:3333/auth/checklogin')
+      .then((response) => {
+        if (response.status === 200) {
+          this.$router.push({ path: '/home' });
+        }
+      })
+      .catch(() => {
+        this.$router.push({ path: '/register' });
+      });
+  },
 };
 </script>
 
