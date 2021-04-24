@@ -16,6 +16,7 @@ export default class User extends Model {
     this.beforeSave(async (user) => {
       if (user.password) {
         user.password_hash = await bcryptjs.hash(user.password, 8);
+        console.log(user.password_hash);
       }
     });
   }
@@ -27,7 +28,9 @@ export default class User extends Model {
     });
   }
 
-  passwordIsValid(password) {
+  async passwordIsValid(password) {
+    // const a = await bcryptjs.compare(password, this.password_hash);
+    // console.log(a, this.password_hash);
     return bcryptjs.compare(password, this.password_hash);
   }
 }
