@@ -8634,18 +8634,6 @@ vue-toastification@^2.0.0-rc.1:
   resolved "https://registry.yarnpkg.com/vue-toastification/-/vue-toastification-2.0.0-rc.1.tgz#6a994c19635a493eec0ee290e84a966e07c709d2"
   integrity sha512-hjauv/FyesNZdwcr5m1SCyvu1JmlB+Ts5bTptDLDmsYYlj6Oqv8NYakiElpCF+Abwkn9J/AChh6FwkTL1HOb7Q==
 
-vue-toastify@^1.8.0:
-  version "1.8.0"
-  resolved "https://registry.yarnpkg.com/vue-toastify/-/vue-toastify-1.8.0.tgz#3632a6a2800f3ebb1c216fa13bf26fd439560f5f"
-  integrity sha512-x+LCXLyUdXYkzt/rQCsGTFdaoh6S1Y05eOgrFKKzTYjrpp0jXGgxFCS46dE8GUm72edjMykha2BJs/RCXX+PcQ==
-  dependencies:
-    vue "^2.6.11"
-
-vue@^2.6.11:
-  version "2.6.12"
-  resolved "https://registry.yarnpkg.com/vue/-/vue-2.6.12.tgz#f5ebd4fa6bd2869403e29a896aed4904456c9123"
-  integrity sha512-uhmLFETqPPNyuLLbsKz6ioJ4q7AZHzD8ZVFNATNyICSZouqP2Sz0rotWQC8UNBF6VGSCs5abnKJoStA6JbCbfg==
-
 vue@^3.0.0:
   version "3.0.11"
   resolved "https://registry.npmjs.org/vue/-/vue-3.0.11.tgz"

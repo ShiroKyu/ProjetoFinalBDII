@@ -67,8 +67,8 @@ export default {
             });
           }
         })
-        .catch(() => {
-          this.toast.error('Login inválido', {
+        .catch((e) => {
+          this.toast.error(e.response.data.error, {
             timeout: 4000,
           });
         });
@@ -76,7 +76,7 @@ export default {
   },
 
   created() {
-    const vue = this;
+    // const vue = this;
 
     axios
       .get('http://localhost:3333/auth/checklogin')
@@ -86,7 +86,7 @@ export default {
         }
       })
       .catch(() => {
-        vue.$data.logged = false;
+        // vue.$data.logged = false;
       });
   },
 };

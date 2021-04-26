@@ -22,7 +22,6 @@ export default {
         .get('http://localhost:3333/auth/logout')
         .then((response) => {
           if (response.status === 200) {
-            console.log('Deslogado!');
             this.$router.push({ path: '/' });
           }
         })
@@ -34,16 +33,9 @@ export default {
   },
 
   created() {
-    axios
-      .get('http://localhost:3333/auth/checklogin')
-      .then((response) => {
-        if (response.status === 200) {
-          this.$router.push({ path: '/home' });
-        }
-      })
-      .catch(() => {
-        this.$router.push({ path: '/' });
-      });
+    axios.get('http://localhost:3333/auth/checklogin').catch(() => {
+      this.$router.push({ path: '/' });
+    });
   },
 };
 </script>

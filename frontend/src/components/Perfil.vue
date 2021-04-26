@@ -31,6 +31,7 @@
 </template>
 <script>
 import axios from 'axios';
+import { useToast } from 'vue-toastification';
 
 export default {
   name: 'Perfil',
@@ -48,15 +49,28 @@ export default {
     };
   },
 
+  setup() {
+    // Get toast interface
+    const toast = useToast();
+    return { toast };
+  },
+
   created() {
     const vue = this;
 
-    axios.get('http://localhost:3333/auth/checklogin').then((response) => {
-      if (response.status === 200) {
-        vue.$data.informacoes_perfil = response.data;
-        this.$router.push({ path: '/perfil' });
-      }
-    });
+    axios
+      .get('http://localhost:3333/auth/checklogin')
+      .then((response) => {
+        if (response.status === 200) {
+          vue.$data.informacoes_perfil = response.data;
+        }
+      })
+      .catch(() => {
+        this.$router.push({ path: '/' });
+        this.toast.error('Não autorizado!', {
+          timeout: 4000,
+        });
+      });
   },
 };
 </script>

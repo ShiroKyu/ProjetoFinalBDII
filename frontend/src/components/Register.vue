@@ -6,14 +6,13 @@
       <form class="login-form" method="POST" @submit.prevent="getRes">
         <h1>Registre-se</h1>
 
-        <!-- <input type="text" placeholder="Usuário" class="login-user" /> -->
         <input type="email" placeholder="Email" class="login-user" v-model="email" />
         <input type="text" placeholder="Matrícula" class="login-user" v-model="matricula" />
         <input type="password" placeholder="Senha" class="login-pass" v-model="password" />
         <!-- <label for="data-nasc"
           >Data de nascimento: <input id="data-nasc" type="date" placeholder="data"
         /></label> -->
-        <button type="submit" class="login-btn">Entrar</button>
+        <button type="submit" class="login-btn">Criar</button>
       </form>
     </section>
   </router-view>
@@ -21,7 +20,8 @@
 
 <script>
 import axios from 'axios';
-// 20151001001
+import { useToast } from 'vue-toastification';
+
 export default {
   name: 'Register',
 
@@ -32,6 +32,11 @@ export default {
       password: '',
       matricula: '',
     };
+  },
+
+  setup() {
+    const toast = useToast();
+    return { toast };
   },
 
   methods: {
@@ -46,14 +51,16 @@ export default {
         })
         .then((response) => {
           if (response.status === 200) {
-            console.log('Criado com sucesso!');
-            this.$router.push({ path: '/login' });
+            this.$router.push({ path: '/' });
+            this.toast.success('Usuário criado com sucesso!', {
+              timeout: 4000,
+            });
           }
         })
         .catch((e) => {
-          console.log(e);
-          console.log('falhou');
-          this.$router.push({ path: '/perfil' });
+          this.toast.error(e.response.data.error, {
+            timeout: 4000,
+          });
         });
     },
   },
@@ -64,10 +71,13 @@ export default {
       .then((response) => {
         if (response.status === 200) {
           this.$router.push({ path: '/home' });
+          this.toast.success('Logado!', {
+            timeout: 4000,
+          });
         }
       })
       .catch(() => {
-        this.$router.push({ path: '/register' });
+        // this.$router.push({ path: '/register' });
       });
   },
 };
