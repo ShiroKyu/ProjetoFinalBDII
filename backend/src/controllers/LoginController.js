@@ -1,5 +1,6 @@
 /* eslint-disable camelcase */
 import jwt from 'jsonwebtoken';
+import { ValidationError } from 'sequelize';
 import User from '../models/User';
 import Student from '../models/Student';
 import Curso from '../models/Curso';
@@ -122,7 +123,16 @@ class LoginController {
 
       return res.status(200).json(user);
     } catch (e) {
-      throw new Error(e);
+      if (e instanceof ValidationError) {
+        if (e.errors[0].path === 'email')
+          return res.status(401).json({ error: 'O email já existe' });
+
+        if (e.errors[0].path === 'student_id')
+          return res
+            .status(401)
+            .json({ error: 'O usuário com essa matrícula já existe' });
+      }
+      return res.status(401).json({ err: e });
     }
   }
 

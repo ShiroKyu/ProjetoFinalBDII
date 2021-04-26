@@ -25,5 +25,6 @@ module.exports = {
     'jest/valid-expect': 'error',
     'import/first': 0,
     'no-param-reassign': 0,
+    'no-restricted-syntax': 0,
   },
 };
