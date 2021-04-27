@@ -4,6 +4,7 @@ import Login from '@/components/Login.vue';
 import Register from '@/components/Register.vue';
 import Perfil from '@/components/Perfil.vue';
 import NotFound from '@/components/NotFound.vue';
+import CreatePost from '@/components/CreatePost.vue';
 
 const routes = [
   {
@@ -15,6 +16,11 @@ const routes = [
     path: '/home',
     name: 'home',
     component: Home,
+  },
+  {
+    path: '/createpost',
+    name: 'CreatePost',
+    component: CreatePost,
   },
   {
     path: '/register',

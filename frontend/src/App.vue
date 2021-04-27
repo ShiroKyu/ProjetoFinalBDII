@@ -16,13 +16,22 @@ export default {
 
 <style>
 :root {
-  --purple-color: #6c63ff;
+  --default-pink-color: #ad5389;
+  --default-purple-color: #3c1053;
 }
 
 * {
   padding: 0;
   margin: 0;
   box-sizing: border-box;
+}
+
+body {
+  background-image: linear-gradient(
+    to right,
+    var(--default-pink-color),
+    var(--default-purple-color)
+  );
 }
 
 #app {

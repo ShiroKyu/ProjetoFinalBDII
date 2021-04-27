@@ -2,7 +2,7 @@
   <router-view>
     <section class="main">
       <section class="left-section">
-        <div class="back-img"></div>
+        <!-- <div class="back-img"></div> -->
 
         <router-link class="back-link" to="/home"><a>&#8592; Voltar</a></router-link>
 

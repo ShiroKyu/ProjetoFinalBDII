@@ -29,8 +29,6 @@ export default {
       res: [],
       email: '',
       password: '',
-      token: '',
-      // logged: false,
     };
   },
   setup() {
@@ -93,10 +91,13 @@ export default {
 </script>
 
 <style scoped>
+#app {
+}
+
 .login-cover {
   width: 50%;
   height: 100%;
-  background-color: #6c63ff;
+  /* background-color: #6c63ff; */
   background-image: url('../../public/img/undraw_authentication_fsn5.svg');
   background-size: 70%;
   background-repeat: no-repeat;
@@ -129,6 +130,8 @@ export default {
 .login-form h1 {
   margin-bottom: 2rem;
 
+  color: #ffffff;
+
   font-family: 'Quicksand', sans-serif;
   font-weight: 400;
 
@@ -137,18 +140,26 @@ export default {
 
 .login-user,
 .login-pass {
-  border-radius: 50px;
-  border: 1px solid var(--purple-color);
-
+  border-bottom: 1px solid #ffffff;
+  border-top: none;
+  border-left: none;
+  border-right: none;
   padding: 10px;
   outline: none;
 
-  background-color: var(--purple-color);
+  background-color: #ffffff00;
 
   color: #ffffff;
 
   width: 50%;
   height: 7%;
+
+  transition: border 0.5s ease;
+}
+
+.login-user:focus,
+.login-pass:focus {
+  border-bottom: 1px solid #6b6060;
 }
 
 .login-user {
@@ -161,7 +172,7 @@ export default {
 
 .reg-link {
   text-decoration: none;
-  color: #938989;
+  color: #ffffff;
   transition: all 2s ease;
 }
 
@@ -174,23 +185,23 @@ export default {
   margin: 1rem;
   outline: none;
 
-  background-color: var(--purple-color);
-  border: none;
-  border-radius: 50px;
+  border: 1px solid #ffffff;
+  border-radius: 2px;
   cursor: pointer;
 
   width: 30%;
   height: 6%;
 
-  background-color: var(--purple-color);
-
+  background-color: #ffffff00;
   color: #ffffff;
 
   transition: background-color 0.6s ease-out;
 }
 
 .login-btn:hover {
-  background-color: #4742ae;
+  background-color: #ffffffd5;
+  color: var(--default-purple-color);
+  /* border: none; */
 }
 
 ::-webkit-input-placeholder {

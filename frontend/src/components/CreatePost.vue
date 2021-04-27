@@ -1,24 +1,15 @@
 <template>
-  <div class="main-div">
-    <header class="header">
-      <nav class="nav-menu">
-        <router-link to="/home"
-          ><p><a class="url-link">Home</a></p></router-link
-        >
-        <router-link to="/perfil"
-          ><p><a class="url-link">Perfil</a></p></router-link
-        >
-        <p><a class="url-link">Buscar estudante</a></p>
-        <p><a class="url-link" @click="deslogar">Sair</a></p>
-      </nav>
-    </header>
-    <router-view>
-      <h1>Posts</h1>
+  <router-view>
+    <form class="create-post">
+      <input type="text" placeholder="Titulo" />
+      <textarea placeholder="Descreva aqui o seu post"></textarea>
+      <label for="img-post">Imagem <input id="img-post" type="file" /></label>
 
-      <router-link to="/createpost"><button>Criar Post</button></router-link>
-      <section class="post-section"></section>
-    </router-view>
-  </div>
+      <button type="submit">Enviar</button>
+    </form>
+
+    <section class="post-section"></section>
+  </router-view>
 </template>
 
 <script>
@@ -26,6 +17,7 @@ import axios from 'axios';
 
 export default {
   name: 'Home',
+
   data() {
     return {
       res: [],
@@ -66,10 +58,12 @@ export default {
   text-align: center;
 }
 
-.post-section {
+.create-post {
+  display: flex;
+  flex-direction: column;
 }
 
-/* a {
+a {
   text-decoration: none !important;
 }
 
@@ -130,5 +124,5 @@ export default {
   .nav-menu p {
     padding: 15px;
   }
-} */
+}
 </style>
