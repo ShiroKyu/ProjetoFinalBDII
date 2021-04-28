@@ -1,33 +1,82 @@
 <template>
   <router-view>
-    <form class="create-post">
-      <input type="text" placeholder="Titulo" />
-      <textarea placeholder="Descreva aqui o seu post"></textarea>
-      <label for="img-post">Imagem <input id="img-post" type="file" /></label>
+    <div class="main-div">
+      <header class="header">
+        <nav class="nav-menu">
+          <router-link to="/home"
+            ><p><a class="url-link">Home</a></p></router-link
+          >
+          <router-link to="/createpost"
+            ><p><a class="url-link">Criar post</a></p></router-link
+          >
+          <router-link to="/perfil"
+            ><p><a class="url-link">Perfil</a></p></router-link
+          >
+          <p><a class="url-link">Buscar estudante</a></p>
 
-      <button type="submit">Enviar</button>
-    </form>
+          <p><a class="url-link" @click="deslogar">Sair</a></p>
+        </nav>
+      </header>
 
-    <section class="post-section"></section>
+      <h1>Criar um post</h1>
+
+      <form class="create-post" method="POST" @submit.prevent="createPost">
+        <input required class="post-title" type="text" placeholder="Titulo" v-model="titulo" />
+        <textarea
+          rows="4"
+          cols="50"
+          required
+          class="post-desc"
+          placeholder="Descreva aqui o seu post"
+          v-model="descricao"
+        ></textarea>
+        <!-- <label class="post-label" for="img-post"
+          >Imagem <input class="img-form" id="img-post" type="file"
+        /></label> -->
+
+        <button class="post-btn" type="submit">Enviar</button>
+      </form>
+
+      <section class="post-section"></section>
+    </div>
   </router-view>
 </template>
 
 <script>
-import axios from 'axios';
+import { useToast } from 'vue-toastification';
+import api from '../services/api';
 
 export default {
-  name: 'Home',
+  name: 'CreatePost',
 
   data() {
     return {
-      res: [],
+      titulo: '',
+      descricao: '',
     };
+  },
+
+  setup() {
+    // Get toast interface
+    const toast = useToast();
+
+    // // Use it!
+    // toast("I'm a toast!");
+
+    // or with options
+    // toast.success('My toast content', {
+    //   timeout: 4000,
+    // });
+    // These options will override the options defined in the "app.use" plugin registration for this specific toast
+
+    // Make it available inside methods
+    return { toast };
   },
 
   methods: {
     deslogar() {
-      axios
-        .get('http://localhost:3333/auth/logout')
+      api
+        .get('/auth/logout')
         .then((response) => {
           if (response.status === 200) {
             this.$router.push({ path: '/' });
@@ -38,10 +87,33 @@ export default {
           console.log('falhou');
         });
     },
+
+    createPost() {
+      const vue = this;
+
+      api
+        .post('/post', {
+          titulo: vue.titulo,
+          descricao: vue.descricao,
+        })
+        .then((response) => {
+          if (response.status === 200) {
+            this.$router.push({ path: '/home' });
+            this.toast.success('Post criado com sucesso!!', {
+              timeout: 3000,
+            });
+          }
+        })
+        .catch((e) => {
+          this.toast.error(e.response.data.error, {
+            timeout: 3000,
+          });
+        });
+    },
   },
 
   created() {
-    axios.get('http://localhost:3333/auth/checklogin').catch(() => {
+    api.get('/auth/checklogin').catch(() => {
       this.$router.push({ path: '/' });
     });
   },
@@ -49,20 +121,7 @@ export default {
 </script>
 
 <style scoped>
-.main-div {
-  display: block;
-}
-
-.main-div h1 {
-  color: #ffffff;
-  text-align: center;
-}
-
-.create-post {
-  display: flex;
-  flex-direction: column;
-}
-
+/* Header */
 a {
   text-decoration: none !important;
 }
@@ -124,5 +183,75 @@ a {
   .nav-menu p {
     padding: 15px;
   }
+}
+
+/* Form */
+.main-div {
+  width: 100%;
+  height: 100%;
+
+  font-family: 'Quicksand', sans-serif;
+}
+
+.main-div h1 {
+  color: #ffffff;
+  text-align: center;
+
+  font-size: 2rem;
+}
+
+.create-post {
+  display: flex;
+  flex-direction: column;
+
+  margin: 4rem;
+  padding: 30px;
+
+  background-color: #1b141f6b;
+
+  border-radius: 20px;
+}
+
+.post-title,
+.post-desc,
+.post-label,
+.post-btn {
+  margin: 10px 0;
+  padding: 10px;
+}
+
+.post-title {
+  outline: none;
+}
+
+.post-desc {
+  outline: none;
+
+  max-width: 100%;
+}
+
+.post-desc:focus {
+  border: 2px solid rgb(109, 33, 116);
+}
+
+.post-label {
+  outline: none;
+  color: white;
+}
+
+.post-btn {
+  margin: 10px auto;
+  padding: 10px 30px;
+  outline: none;
+
+  border: none;
+
+  transition: background-color 0.5s ease;
+  cursor: pointer;
+}
+
+.post-btn:hover {
+  background-color: rgb(159, 107, 165);
+  color: white;
 }
 </style>

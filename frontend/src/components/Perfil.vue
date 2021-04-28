@@ -23,53 +23,60 @@
           <p><b>E-mail</b>: {{ informacoes_perfil.email }}</p>
           <p><b>Matrícula</b>: {{ informacoes_perfil.matricula }}</p>
           <p><b>Situação</b>: {{ informacoes_perfil.situacao }}</p>
-          <p><b>Curso</b>: {{ informacoes_perfil.curso }}</p>
+          <p><b>Curso</b>: {{ informacoes_perfil.nome_curso }}</p>
         </div>
       </section>
     </section>
   </router-view>
 </template>
 <script>
-import axios from 'axios';
 import { useToast } from 'vue-toastification';
+import api from '../services/api';
 
 export default {
   name: 'Perfil',
   data() {
     return {
-      informacoes_perfil: {
-        nome: '',
-        email: '',
-        matricula: '',
-        curso: '',
-        situacao: '',
-        cota: '',
-        foto_url: 'https://bityli.com/j1zBy',
-      },
+      informacoes_perfil: {},
     };
   },
 
   setup() {
-    // Get toast interface
     const toast = useToast();
     return { toast };
   },
 
   created() {
-    const vue = this;
+    const token = localStorage.getItem('token');
+    const email = localStorage.getItem('email');
 
-    axios
-      .get('http://localhost:3333/auth/checklogin')
-      .then((response) => {
-        if (response.status === 200) {
-          vue.$data.informacoes_perfil = response.data;
-        }
-      })
-      .catch(() => {
-        this.$router.push({ path: '/' });
+    if (!token && !email) {
+      this.$router.push({ path: '/' });
+      this.toast.error('Não autorizado!', {
+        timeout: 4000,
+      });
+    }
+
+    if (token && email) {
+      api.post('/auth/checklogin', { email, token }).catch(() => {
+        this.$router.push({ path: '/home' });
         this.toast.error('Não autorizado!', {
           timeout: 4000,
         });
+      });
+    }
+  },
+
+  mounted() {
+    const email = localStorage.getItem('email');
+
+    api
+      .get(`/user/${email}`)
+      .then((response) => {
+        this.$data.informacoes_perfil = response.data;
+      })
+      .catch((e) => {
+        console.log(e);
       });
   },
 };

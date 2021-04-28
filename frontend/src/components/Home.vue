@@ -1,56 +1,93 @@
 <template>
-  <div class="main-div">
-    <header class="header">
-      <nav class="nav-menu">
-        <router-link to="/home"
-          ><p><a class="url-link">Home</a></p></router-link
-        >
-        <router-link to="/perfil"
-          ><p><a class="url-link">Perfil</a></p></router-link
-        >
-        <p><a class="url-link">Buscar estudante</a></p>
-        <p><a class="url-link" @click="deslogar">Sair</a></p>
-      </nav>
-    </header>
-    <router-view>
+  <router-view>
+    <div class="main-div">
+      <header class="header">
+        <nav class="nav-menu">
+          <router-link to="/home"
+            ><p><a class="url-link">Home</a></p></router-link
+          >
+          <router-link to="/createpost"
+            ><p><a class="url-link">Criar post</a></p></router-link
+          >
+          <router-link to="/perfil"
+            ><p><a class="url-link">Perfil</a></p></router-link
+          >
+
+          <p><a class="url-link">Buscar estudante</a></p>
+          <p><a class="url-link" @click="deslogar">Sair</a></p>
+        </nav>
+      </header>
+
       <h1>Posts</h1>
 
-      <router-link to="/createpost"><button>Criar Post</button></router-link>
+      {{ posts }}
+
       <section class="post-section"></section>
-    </router-view>
-  </div>
+    </div>
+  </router-view>
 </template>
 
 <script>
-import axios from 'axios';
+import { useToast } from 'vue-toastification';
+import api from '../services/api';
 
 export default {
   name: 'Home',
   data() {
     return {
-      res: [],
+      posts: [],
     };
+  },
+
+  // computed: {
+  //   counter() {
+  //     return this.$store.state.count;
+  //   },
+  //   token() {
+  //     return this.$store.state.token;
+  //   },
+  // },
+
+  setup() {
+    const toast = useToast();
+    return { toast };
   },
 
   methods: {
     deslogar() {
-      axios
-        .get('http://localhost:3333/auth/logout')
-        .then((response) => {
-          if (response.status === 200) {
-            this.$router.push({ path: '/' });
-          }
-        })
-        .catch((e) => {
-          console.log(e);
-          console.log('falhou');
-        });
+      localStorage.removeItem('email');
+      localStorage.removeItem('token');
+
+      this.$router.push({ path: '/' });
     },
   },
 
   created() {
-    axios.get('http://localhost:3333/auth/checklogin').catch(() => {
+    const token = localStorage.getItem('token');
+    const email = localStorage.getItem('email');
+
+    if (!token && !email) {
       this.$router.push({ path: '/' });
+      this.toast.error('Não autorizado!', {
+        timeout: 4000,
+      });
+    }
+
+    if (token && email) {
+      api.post('/auth/checklogin', { email, token }).catch(() => {
+        this.$router.push({ path: '/home' });
+        this.toast.error('Não autorizado!', {
+          timeout: 4000,
+        });
+      });
+    }
+  },
+
+  mounted() {
+    api.get('/post').then((response) => {
+      if (response.status === 200) {
+        this.$data.posts = response.data;
+      }
     });
   },
 };
@@ -69,7 +106,7 @@ export default {
 .post-section {
 }
 
-/* a {
+a {
   text-decoration: none !important;
 }
 
@@ -130,5 +167,5 @@ export default {
   .nav-menu p {
     padding: 15px;
   }
-} */
+}
 </style>

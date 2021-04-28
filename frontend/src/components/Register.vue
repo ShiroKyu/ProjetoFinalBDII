@@ -16,8 +16,8 @@
 </template>
 
 <script>
-import axios from 'axios';
 import { useToast } from 'vue-toastification';
+import api from '../services/api';
 
 export default {
   name: 'Register',
@@ -40,7 +40,7 @@ export default {
     getRes() {
       const vue = this;
 
-      axios
+      api
         .post('http://localhost:3333/auth/register', {
           email: vue.email,
           password: vue.password,
@@ -63,19 +63,14 @@ export default {
   },
 
   created() {
-    axios
-      .get('http://localhost:3333/auth/checklogin')
-      .then((response) => {
-        if (response.status === 200) {
-          this.$router.push({ path: '/home' });
-          this.toast.success('Logado!', {
-            timeout: 4000,
-          });
-        }
-      })
-      .catch(() => {
-        // this.$router.push({ path: '/register' });
+    const token = localStorage.getItem('token');
+    const email = localStorage.getItem('email');
+
+    if (token && email) {
+      api.post('/auth/checklogin', { email, token }).then((response) => {
+        if (response.status === 200) this.$router.push({ path: '/home' });
       });
+    }
   },
 };
 </script>

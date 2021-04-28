@@ -18,8 +18,8 @@
 </template>
 
 <script>
-import axios from 'axios';
 import { useToast } from 'vue-toastification';
+import api from '../services/api';
 
 export default {
   name: 'Login',
@@ -31,20 +31,9 @@ export default {
       password: '',
     };
   },
+
   setup() {
-    // Get toast interface
     const toast = useToast();
-
-    // // Use it!
-    // toast("I'm a toast!");
-
-    // or with options
-    // toast.success('My toast content', {
-    //   timeout: 4000,
-    // });
-    // These options will override the options defined in the "app.use" plugin registration for this specific toast
-
-    // Make it available inside methods
     return { toast };
   },
 
@@ -52,20 +41,27 @@ export default {
     getRes() {
       const vue = this;
 
-      axios
-        .post('http://localhost:3333/auth/login', {
+      api
+        .post('/auth/login', {
           email: vue.email,
           password: vue.password,
         })
         .then((response) => {
           if (response.status === 200) {
+            const { token } = response.data;
+
+            localStorage.setItem('email', vue.email);
+            localStorage.setItem('token', token);
+
             this.$router.push({ path: '/home' });
+
             this.toast.success('Logado!', {
               timeout: 4000,
             });
           }
         })
         .catch((e) => {
+          console.log(e);
           this.toast.error(e.response.data.error, {
             timeout: 4000,
           });
@@ -74,26 +70,30 @@ export default {
   },
 
   created() {
-    // const vue = this;
+    const token = localStorage.getItem('token');
+    const email = localStorage.getItem('email');
 
-    axios
-      .get('http://localhost:3333/auth/checklogin')
-      .then((response) => {
-        if (response.status === 200) {
-          this.$router.push({ path: '/home' });
-        }
-      })
-      .catch(() => {
-        // vue.$data.logged = false;
-      });
+    if (token && email) {
+      api
+        .post('/auth/checklogin', { email, token })
+        .then((response) => {
+          if (response.status === 200) {
+            // this.$store.dispatch({
+            //   type: 'updateToken',
+            //   token,
+            // });
+            this.$router.push({ path: '/home' });
+          }
+        })
+        .catch((e) => {
+          console.log('erro', e);
+        });
+    }
   },
 };
 </script>
 
 <style scoped>
-#app {
-}
-
 .login-cover {
   width: 50%;
   height: 100%;
