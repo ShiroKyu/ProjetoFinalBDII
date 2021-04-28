@@ -141,7 +141,7 @@ export default {
 }
 
 .right-section {
-  background-color: #ffffff;
+  background-image: linear-gradient(to right, #6c63ff, #d0cde1);
 }
 
 .student-info {
@@ -151,10 +151,11 @@ export default {
 
   text-align: center;
 
-  border: 1px solid rgb(255, 255, 255);
   box-shadow: 2px 2px 6px black;
 
-  background-color: #ffffff;
+  background-color: #6c63ff;
+
+  color: black;
 }
 
 .student-info h2 {
