@@ -4,11 +4,14 @@ require('dotenv').config({
 
 import express from 'express';
 import cors from 'cors';
+import cookieSession from 'cookie-session';
 
 import './database';
 
 import userRoutes from './routes/user';
 import authRoutes from './routes/auth';
+import postRoutes from './routes/post';
+import fotoRoutes from './routes/foto';
 
 const whiteList = ['http://localhost:8080', 'http://localhost:3333'];
 
@@ -30,6 +33,12 @@ class App {
   }
 
   middlewares() {
+    this.app.use(
+      cookieSession({
+        name: 'session',
+        keys: ['key1', 'key2'],
+      })
+    );
     this.app.use(cors(corsOptions));
     this.app.use(express.json());
     this.app.use(express.urlencoded({ extended: true }));
@@ -38,6 +47,8 @@ class App {
   routes() {
     this.app.use('/user', userRoutes);
     this.app.use('/auth', authRoutes);
+    this.app.use('/post', postRoutes);
+    this.app.use('/foto', fotoRoutes);
   }
 }
 

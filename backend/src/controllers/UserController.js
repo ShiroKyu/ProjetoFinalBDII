@@ -1,5 +1,6 @@
 import User from '../models/User';
 import Student from '../models/Student';
+import Curso from '../models/Curso';
 
 class UserController {
   async store(req, res) {
@@ -53,7 +54,8 @@ class UserController {
 
   async show(req, res) {
     try {
-      const user = await User.findByPk(req.params.id, {
+      const user = await User.findOne({
+        where: { email: req.params.email },
         attributes: ['id', 'email', 'student_id'],
         include: {
           association: 'user_tem_matricula',
@@ -63,7 +65,18 @@ class UserController {
 
       if (!user) return res.status(400).json({ err: 'Usuário não encontrado' });
 
-      return res.status(200).json(user);
+      const {
+        email,
+        user_tem_matricula: { nome, matricula, situacao, cota, curso_id },
+      } = user;
+
+      const curso = await Curso.findByPk(curso_id);
+
+      const { nome: nome_curso } = curso;
+
+      return res
+        .status(200)
+        .json({ nome, email, matricula, situacao, cota, nome_curso });
     } catch (e) {
       return res.status(400).json({ err: 'Houve um problema' });
     }

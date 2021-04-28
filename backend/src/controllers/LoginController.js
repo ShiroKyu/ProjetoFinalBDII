@@ -1,26 +1,36 @@
-/* eslint-disable camelcase */
+/* eslint-disable consistent-return */
 import jwt from 'jsonwebtoken';
 import { ValidationError } from 'sequelize';
 import User from '../models/User';
 import Student from '../models/Student';
-import Curso from '../models/Curso';
+// import Curso from '../models/Curso';
 
 import redisClient from '../database/redis';
 
 class LoginController {
   async checkLogin(req, res) {
     try {
-      redisClient.get('user', async (err, reply) => {
-        if (reply !== null) {
-          const user = JSON.parse(reply.toString());
+      const { token, email: reqEmail } = req.body;
 
-          return res.status(200).json(user);
-        }
+      if (!token && !reqEmail)
+        return res.status(401).json({ error: 'Email e token não inclusos' });
 
-        return res.status(401).json({ err: 'Não existe usuário' });
-      });
+      const dados = jwt.verify(token, process.env.TOKEN_SECRET);
+      const { email } = dados;
+
+      if (reqEmail === email) return res.status(200).json({ valido: true });
+
+      return res.status(401).json({ errors: ['Token expirado ou inválido'] });
     } catch (e) {
-      throw new Error(e);
+      // redisClient.get(reqEmail, async (err, reply) => {
+      //   if (reply !== null) {
+      //     const token = JSON.parse(reply.toString());
+      //     return res.status(200).json(token);
+      //   }
+
+      //   return res.status(401).json({ msg: 'Nenhum usuário no cache' });
+      // });
+      return res.status(401).json({ errors: e });
     }
   }
 
@@ -53,47 +63,25 @@ class LoginController {
         });
       }
 
-      const {
-        id,
-        user_tem_matricula: { nome, matricula, situacao, cota, curso_id },
-      } = user;
+      // const {
+      //   id,
+      //   user_tem_matricula: { nome, matricula, situacao, cota, curso_id },
+      // } = user;
 
-      const curso = await Curso.findByPk(curso_id);
+      // const curso = await Curso.findByPk(curso_id);
 
-      const { nome: nomeCurso } = curso;
+      // const { nome: nomeCurso } = curso;
 
-      const token = jwt.sign({ id, email }, process.env.TOKEN_SECRET, {
+      const token = jwt.sign({ email }, process.env.TOKEN_SECRET, {
         expiresIn: process.env.TOKEN_EXPIRATION,
       });
 
-      redisClient.setex(
-        'user',
-        86400,
-        JSON.stringify({
-          nome,
-          email,
-          password,
-          token,
-          matricula,
-          situacao,
-          cota,
-          curso: nomeCurso,
-        })
-      );
+      redisClient.setex(email, 604800, JSON.stringify({ token }));
 
-      return res.status(200).json({
-        id,
-        user_tem_matricula: {
-          email,
-          nome,
-          matricula,
-          situacao,
-          cota,
-          nomeCurso,
-        },
-      });
+      return res.status(200).json({ token });
     } catch (e) {
-      throw new Error(e);
+      console.log(e);
+      return res.status(401).json({ error: e });
     }
   }
 
@@ -138,7 +126,7 @@ class LoginController {
 
   async logout(req, res) {
     try {
-      redisClient.del('user');
+      redisClient.del(req.body.email);
 
       return res.status(200).json({ msg: 'Sucesso ao deletar' });
     } catch (e) {

@@ -1,5 +1,9 @@
 import app from './app';
 
-const PORT = 3333;
+require('dotenv').config({
+  path: process.env.NODE_ENV === 'test' ? '.env.test' : '.env',
+});
 
-app.listen(PORT, () => console.log(`Ouvindo na porta ${PORT}`));
+app.listen(process.env.PORT, () =>
+  console.log(`Ouvindo na porta ${process.env.PORT}`)
+);

@@ -33,6 +33,38 @@ class TokenController {
       .status(200)
       .json({ token, user: { name: user.name, email: user.email } });
   }
+
+  async validate(req, res) {
+    const { token, email: reqEmail } = req.body;
+
+    if (!token && !reqEmail)
+      return res.status(401).json({
+        errors: ['Token de autenticação ou email não incluso'],
+      });
+
+    try {
+      const dados = jwt.verify(token, process.env.TOKEN_SECRET);
+
+      const { id, email } = dados;
+
+      const user = await User.findOne({
+        where: { id, email },
+      });
+
+      if (!user)
+        return res.status(401).json({
+          errors: ['O usuário não existe'],
+        });
+
+      if (email === reqEmail) return res.status(401).json({ msg: 'Validado' });
+
+      return res.status(401).json({ errors: ['Token expirado ou inválido'] });
+    } catch (e) {
+      return res.status(401).json({
+        errors: ['Token expirado ou inválido'],
+      });
+    }
+  }
 }
 
 export default new TokenController();

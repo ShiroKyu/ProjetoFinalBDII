@@ -4,6 +4,10 @@ module.exports = {
     node: true,
     // 'jest/globals': true,
   },
+  globals: {
+    localStorage: true,
+    fetch: true,
+  },
   extends: [
     'airbnb-base',
     'prettier',
@@ -26,5 +30,6 @@ module.exports = {
     'import/first': 0,
     'no-param-reassign': 0,
     'no-restricted-syntax': 0,
+    camelcase: 0,
   },
 };
