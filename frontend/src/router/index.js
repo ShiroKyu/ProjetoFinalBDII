@@ -5,6 +5,7 @@ import Register from '@/components/Register.vue';
 import Perfil from '@/components/Perfil.vue';
 import NotFound from '@/components/NotFound.vue';
 import CreatePost from '@/components/CreatePost.vue';
+import Search from '@/components/Search.vue';
 
 const routes = [
   {
@@ -31,6 +32,11 @@ const routes = [
     path: '/perfil',
     name: 'Perfil',
     component: Perfil,
+  },
+  {
+    path: '/search',
+    name: 'Search',
+    component: Search,
   },
   {
     path: '/:catchAll(.*)',

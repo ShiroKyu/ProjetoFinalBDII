@@ -12,8 +12,9 @@
           <router-link to="/perfil"
             ><p><a class="url-link">Perfil</a></p></router-link
           >
-
-          <p><a class="url-link">Buscar estudante</a></p>
+          <router-link to="/search"
+            ><p><a class="url-link">Buscar estudante</a></p></router-link
+          >
           <p><a class="url-link" @click="deslogar">Sair</a></p>
         </nav>
       </header>
