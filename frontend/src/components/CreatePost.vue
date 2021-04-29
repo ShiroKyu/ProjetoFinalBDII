@@ -30,9 +30,6 @@
           placeholder="Descreva aqui o seu post"
           v-model="descricao"
         ></textarea>
-        <!-- <label class="post-label" for="img-post"
-          >Imagem <input class="img-form" id="img-post" type="file"
-        /></label> -->
 
         <button class="post-btn" type="submit">Enviar</button>
       </form>
@@ -53,23 +50,12 @@ export default {
     return {
       titulo: '',
       descricao: '',
+      user_id: '',
     };
   },
 
   setup() {
-    // Get toast interface
     const toast = useToast();
-
-    // // Use it!
-    // toast("I'm a toast!");
-
-    // or with options
-    // toast.success('My toast content', {
-    //   timeout: 4000,
-    // });
-    // These options will override the options defined in the "app.use" plugin registration for this specific toast
-
-    // Make it available inside methods
     return { toast };
   },
 
@@ -90,11 +76,13 @@ export default {
 
     createPost() {
       const vue = this;
+      const email = localStorage.getItem('email');
 
       api
         .post('/post', {
           titulo: vue.titulo,
           descricao: vue.descricao,
+          email,
         })
         .then((response) => {
           if (response.status === 200) {
@@ -113,9 +101,24 @@ export default {
   },
 
   created() {
-    api.get('/auth/checklogin').catch(() => {
+    const token = localStorage.getItem('token');
+    const email = localStorage.getItem('email');
+
+    if (!token && !email) {
       this.$router.push({ path: '/' });
-    });
+      this.toast.error('Não autorizado!', {
+        timeout: 4000,
+      });
+    }
+
+    if (token && email) {
+      api.post('/auth/checklogin', { email, token }).catch(() => {
+        this.$router.push({ path: '/home' });
+        this.toast.error('Não autorizado!', {
+          timeout: 4000,
+        });
+      });
+    }
   },
 };
 </script>

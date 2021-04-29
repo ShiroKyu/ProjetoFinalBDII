@@ -21,9 +21,27 @@
 
       <h1>Posts</h1>
 
-      {{ posts }}
+      <!-- {{ posts }} -->
 
-      <section class="post-section"></section>
+      <section class="post-section">
+        <div class="post-block" :key="index" v-for="(post, index) in posts">
+          <h3 class="post-title">{{ post.titulo }}</h3>
+          <hr />
+          <p class="post-desc">
+            {{ post.descricao }}
+          </p>
+          <p class="post-author">
+            Autor: <span>{{ post.email }}</span>
+          </p>
+          <p class="post-date">
+            Data e hora da publicação:<br />
+            <span
+              >{{ new Date(post.data).toLocaleDateString() }}
+              {{ new Date(post.data).toLocaleTimeString() }}</span
+            >
+          </p>
+        </div>
+      </section>
     </div>
   </router-view>
 </template>
@@ -39,15 +57,6 @@ export default {
       posts: [],
     };
   },
-
-  // computed: {
-  //   counter() {
-  //     return this.$store.state.count;
-  //   },
-  //   token() {
-  //     return this.$store.state.token;
-  //   },
-  // },
 
   setup() {
     const toast = useToast();
@@ -95,22 +104,7 @@ export default {
 </script>
 
 <style scoped>
-.main-div {
-  display: block;
-}
-
-.main-div h1 {
-  color: #ffffff;
-  text-align: center;
-}
-
-.post-section {
-}
-
-a {
-  text-decoration: none !important;
-}
-
+/* Header */
 .header {
   width: 100vw;
   height: 10vh;
@@ -168,5 +162,77 @@ a {
   .nav-menu p {
     padding: 15px;
   }
+}
+/* ////////// */
+
+.main-div {
+  display: block;
+
+  width: 100%;
+  height: 100%;
+  overflow-x: hidden;
+  font-family: 'Quicksand', sans-serif;
+}
+
+.main-div h1 {
+  color: #ffffff;
+  text-align: center;
+
+  margin: 30px;
+}
+
+.post-section {
+  display: flex;
+  flex-wrap: wrap;
+
+  justify-content: center;
+
+  width: 100%;
+  height: 100%;
+}
+
+.post-block {
+  padding: 20px;
+  margin: 10px;
+  /*background-color: #ff00005c;*/
+  background-color: #1b141f6b;
+  width: 300px;
+  height: auto;
+  border-radius: 10px;
+
+  transition: transform 0.7s ease;
+}
+
+.post-block:hover {
+  transform: scale(1.05);
+}
+
+.post-title,
+.post-desc,
+.post-time,
+.post-date {
+  margin: 10px auto;
+}
+
+.post-title {
+  color: #ffffff;
+}
+
+.post-desc {
+  background-color: white;
+  border-radius: 5px;
+  padding: 10px;
+
+  max-height: 200px;
+
+  overflow-y: auto;
+}
+
+span {
+  color: #ffffff;
+}
+
+a {
+  text-decoration: none !important;
 }
 </style>

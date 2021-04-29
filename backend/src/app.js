@@ -4,8 +4,7 @@ require('dotenv').config({
 
 import express from 'express';
 import cors from 'cors';
-import cookieSession from 'cookie-session';
-
+import { resolve } from 'path';
 import './database';
 
 import userRoutes from './routes/user';
@@ -33,15 +32,10 @@ class App {
   }
 
   middlewares() {
-    this.app.use(
-      cookieSession({
-        name: 'session',
-        keys: ['key1', 'key2'],
-      })
-    );
     this.app.use(cors(corsOptions));
     this.app.use(express.json());
     this.app.use(express.urlencoded({ extended: true }));
+    this.app.use(express.static(resolve(__dirname, '..', 'uploads')));
   }
 
   routes() {

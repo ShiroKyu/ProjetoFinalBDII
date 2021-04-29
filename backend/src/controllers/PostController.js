@@ -4,12 +4,13 @@ import Post from '../models/Post';
 class PostController {
   async store(req, res) {
     try {
-      const { titulo, descricao } = req.body;
+      const { titulo, descricao, email } = req.body;
 
       const post = Post({
         titulo,
         descricao,
         data: new Date(),
+        email,
       });
 
       await post.save((err, postSalvo) => {
