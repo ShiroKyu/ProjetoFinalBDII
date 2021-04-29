@@ -200,6 +200,7 @@ a {
   color: #ffffff;
   text-align: center;
 
+  margin: 30px;
   font-size: 2rem;
 }
 

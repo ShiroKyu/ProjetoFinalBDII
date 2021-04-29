@@ -188,6 +188,8 @@ export default {
 
   width: 100%;
   height: 100%;
+
+  font-family: 'Quicksand', sans-serif;
 }
 
 .post-block {

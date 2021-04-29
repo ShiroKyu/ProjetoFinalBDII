@@ -9,6 +9,7 @@
         <input type="email" placeholder="Email" class="login-user" v-model="email" />
         <input type="text" placeholder="Matrícula" class="login-user" v-model="matricula" />
         <input type="password" placeholder="Senha" class="login-pass" v-model="password" />
+
         <button type="submit" class="login-btn">Criar</button>
       </form>
     </section>
@@ -77,6 +78,10 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+a {
+  text-decoration: none;
+}
+
 .login-cover {
   width: 50%;
   height: 100%;
