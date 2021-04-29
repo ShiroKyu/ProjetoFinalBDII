@@ -1,6 +1,7 @@
 import User from '../models/User';
 import Student from '../models/Student';
 import Curso from '../models/Curso';
+import Foto from '../models/Foto';
 
 class UserController {
   async store(req, res) {
@@ -35,10 +36,15 @@ class UserController {
     try {
       const users = await User.findAll({
         attributes: ['id', 'email', 'student_id'],
-        include: {
-          association: 'user_tem_matricula',
-          attributes: ['nome', 'matricula', 'situacao', 'cota', 'curso_id'],
-        },
+        include: [
+          {
+            association: 'user_tem_matricula',
+            attributes: ['nome', 'matricula', 'situacao', 'cota', 'curso_id'],
+          },
+          {
+            model: Foto,
+          },
+        ],
       });
 
       if (!users)
@@ -57,10 +63,15 @@ class UserController {
       const user = await User.findOne({
         where: { email: req.params.email },
         attributes: ['id', 'email', 'student_id'],
-        include: {
-          association: 'user_tem_matricula',
-          attributes: ['nome', 'matricula', 'situacao', 'cota', 'curso_id'],
-        },
+        include: [
+          {
+            association: 'user_tem_matricula',
+            attributes: ['nome', 'matricula', 'situacao', 'cota', 'curso_id'],
+          },
+          {
+            model: Foto,
+          },
+        ],
       });
 
       if (!user) return res.status(400).json({ err: 'Usuário não encontrado' });
@@ -68,15 +79,25 @@ class UserController {
       const {
         email,
         user_tem_matricula: { nome, matricula, situacao, cota, curso_id },
+        Fotos,
       } = user;
+
+      const foto = Fotos[Fotos.length - 1];
+      const { originalname, filename } = foto;
 
       const curso = await Curso.findByPk(curso_id);
 
       const { nome: nome_curso } = curso;
 
-      return res
-        .status(200)
-        .json({ nome, email, matricula, situacao, cota, nome_curso });
+      return res.status(200).json({
+        nome,
+        email,
+        matricula,
+        situacao,
+        cota,
+        nome_curso,
+        Foto: { originalname, filename },
+      });
     } catch (e) {
       return res.status(400).json({ err: 'Houve um problema' });
     }

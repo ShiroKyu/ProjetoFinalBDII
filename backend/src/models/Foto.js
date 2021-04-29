@@ -22,14 +22,14 @@ export default class Foto extends Model {
             },
           },
         },
-        url: {
-          type: Sequelize.VIRTUAL,
-          get() {
-            return `localhost:${process.env.PORT}/images/${this.getDataValue(
-              'filename'
-            )}`;
-          },
-        },
+        // url: {
+        //   type: Sequelize.VIRTUAL,
+        //   get() {
+        //     return `localhost:${process.env.PORT}/images/${this.getDataValue(
+        //       'filename'
+        //     )}`;
+        //   },
+        // },
       },
       {
         sequelize,
@@ -41,6 +41,6 @@ export default class Foto extends Model {
   }
 
   static associate(models) {
-    this.belongsTo(models.Student, { foreignKey: 'user_id' });
+    this.belongsTo(models.User, { foreignKey: 'user_id' });
   }
 }
