@@ -83,7 +83,7 @@ class UserController {
       } = user;
 
       const foto = Fotos[Fotos.length - 1];
-      const { originalname, filename } = foto;
+      const { url, filename } = foto;
 
       const curso = await Curso.findByPk(curso_id);
 
@@ -96,7 +96,7 @@ class UserController {
         situacao,
         cota,
         nome_curso,
-        Foto: { originalname, filename },
+        Foto: { url, filename },
       });
     } catch (e) {
       return res.status(400).json({ err: 'Houve um problema' });

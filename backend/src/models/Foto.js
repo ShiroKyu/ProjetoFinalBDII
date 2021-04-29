@@ -22,14 +22,14 @@ export default class Foto extends Model {
             },
           },
         },
-        // url: {
-        //   type: Sequelize.VIRTUAL,
-        //   get() {
-        //     return `localhost:${process.env.PORT}/images/${this.getDataValue(
-        //       'filename'
-        //     )}`;
-        //   },
-        // },
+        url: {
+          type: Sequelize.VIRTUAL,
+          get() {
+            return `localhost:${process.env.PORT}/images/${this.getDataValue(
+              'filename'
+            )}`;
+          },
+        },
       },
       {
         sequelize,

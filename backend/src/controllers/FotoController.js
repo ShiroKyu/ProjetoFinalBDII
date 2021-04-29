@@ -20,7 +20,7 @@ class FotoController {
         const { user_id } = req.body;
 
         const foto = await Foto.create({ originalname, filename, user_id });
-        console.log(foto);
+
         const user = await User.findByPk(user_id, {
           include: {
             model: Foto,
