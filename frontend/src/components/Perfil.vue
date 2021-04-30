@@ -9,11 +9,21 @@
         </div>
         <div class="student-info">
           <h2>Dados do estudante</h2>
-          <p><b>Nome</b>: {{ informacoes_perfil.nome }}</p>
-          <p><b>E-mail</b>: {{ informacoes_perfil.email }}</p>
-          <p><b>Matrícula</b>: {{ informacoes_perfil.matricula }}</p>
-          <p><b>Situação</b>: {{ informacoes_perfil.situacao }}</p>
-          <p><b>Curso</b>: {{ informacoes_perfil.nome_curso }}</p>
+          <p>
+            <b>Nome</b>: <span>{{ informacoes_perfil.nome }}</span>
+          </p>
+          <p>
+            <b>E-mail</b>: <span>{{ informacoes_perfil.email }}</span>
+          </p>
+          <p>
+            <b>Matrícula</b>: <span>{{ informacoes_perfil.matricula }}</span>
+          </p>
+          <p>
+            <b>Situação</b>: <span>{{ informacoes_perfil.situacao }}</span>
+          </p>
+          <p>
+            <b>Curso</b>: <span>{{ informacoes_perfil.nome_curso }}</span>
+          </p>
         </div>
 
         <div class="update-section">
@@ -30,7 +40,7 @@
       </section>
 
       <section class="right-section">
-        <h2>Posts</h2>
+        <h2>Seus posts</h2>
 
         <section v-if="hasPosts" class="post-section">
           <div class="post-block" :key="index" v-for="(post, index) in informacoes_perfil.posts">
@@ -138,6 +148,8 @@ export default {
 .right-section h2 {
   text-align: center;
   margin-top: 3rem;
+
+  color: white;
 }
 
 .back-img {
@@ -175,15 +187,20 @@ export default {
   text-align: center;
   box-shadow: 2px 2px 6px black;
   background-image: linear-gradient(to right, #800080, #ffc0cb);
-  color: black;
+  color: white;
 }
 
 .student-info h2 {
   margin-bottom: 2rem;
+  color: white;
 }
 
 .student-info p {
   padding: 8px;
+}
+
+.student-info span {
+  color: black;
 }
 
 .profile-img-container {
@@ -249,12 +266,7 @@ export default {
 }
 
 .post-section {
-  display: flex;
-  flex-wrap: wrap;
-
   margin: 30px 0;
-
-  justify-content: center;
 
   width: 100%;
   height: 80%;
@@ -265,9 +277,21 @@ export default {
 
 .post-block {
   width: 90%;
-  height: auto;
+  max-height: 200px;
   background-color: #1b141f6b;
-  margin: 5px 0;
+  margin: 10px auto;
   padding: 10px;
+
+  border-radius: 5px;
+}
+
+.post-title {
+  color: white;
+}
+
+.post-desc {
+  padding: 5px 0;
+
+  overflow-x: auto;
 }
 </style>

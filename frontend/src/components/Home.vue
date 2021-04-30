@@ -19,11 +19,22 @@
         </nav>
       </header>
 
-      <h1>Posts</h1>
+      <h1 class="alter-post" @click="showPosts">Posts</h1>
 
-      <!-- {{ posts }} -->
+      <form class="filter-section" method="GET" @submit.prevent="filterPosts">
+        <label for="post-filter">Filtrar: </label>
 
-      <section v-if="hasPosts" class="post-section">
+        <select name="post-filter" id="post-filter" v-model="email">
+          <option class="post-option"></option>
+          <option class="post-option" :key="index" v-for="(user, index) in users">
+            {{ user }}
+          </option>
+        </select>
+
+        <button class="filter-btn" type="submit">Filtrar</button>
+      </form>
+
+      <section v-if="hasPosts && !email" class="post-section">
         <div class="post-block" :key="index" v-for="(post, index) in posts">
           <h3 class="post-title">{{ post.titulo }}</h3>
           <hr />
@@ -43,7 +54,27 @@
         </div>
       </section>
 
-      <section v-else class="post-section-void">
+      <section v-if="hasPosts && email" class="post-section">
+        <div class="post-block" :key="index" v-for="(post, index) in posts">
+          <h3 class="post-title">{{ post.titulo }}</h3>
+          <hr />
+          <p class="post-desc">
+            {{ post.descricao }}
+          </p>
+          <p class="post-author">
+            Autor: <span>{{ post.email }}</span>
+          </p>
+          <p class="post-date">
+            Data e hora da publicação:<br />
+            <span
+              >{{ new Date(post.data).toLocaleDateString() }}
+              {{ new Date(post.data).toLocaleTimeString() }}</span
+            >
+          </p>
+        </div>
+      </section>
+
+      <section v-if="!hasPosts" class="post-section-void">
         <h2>Nada aqui</h2>
       </section>
     </div>
@@ -60,6 +91,8 @@ export default {
     return {
       posts: [],
       hasPosts: false,
+      users: [],
+      email: '',
     };
   },
 
@@ -74,6 +107,49 @@ export default {
       localStorage.removeItem('token');
 
       this.$router.push({ path: '/' });
+    },
+
+    fetchUsers() {
+      const vue = this;
+      api
+        .get('/user/')
+        .then((response) => {
+          const users = response.data;
+
+          for (const user of users) {
+            vue.users.push(user.email);
+          }
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    },
+
+    filterPosts() {
+      const vue = this;
+
+      api.get('/post').then((response) => {
+        if (response.status === 200) {
+          this.$data.posts = response.data.filter((post) => post.email === vue.email);
+
+          if (this.$data.posts.length > 0) {
+            this.hasPosts = true;
+          }
+        }
+      });
+    },
+
+    getPosts() {
+      const vue = this;
+
+      api.get('/post').then((response) => {
+        if (response.status === 200) {
+          vue.posts = response.data;
+          if (vue.posts.length > 0) {
+            vue.hasPosts = true;
+          }
+        }
+      });
     },
   },
 
@@ -99,14 +175,9 @@ export default {
   },
 
   mounted() {
-    api.get('/post').then((response) => {
-      if (response.status === 200) {
-        this.$data.posts = response.data;
-        if (this.$data.posts.length > 0) {
-          this.hasPosts = true;
-        }
-      }
-    });
+    this.getPosts();
+
+    this.fetchUsers();
   },
 };
 </script>
@@ -189,6 +260,11 @@ export default {
   margin: 30px;
 }
 
+.alter-post:hover,
+.alter-filter:hover {
+  text-decoration: underline;
+}
+
 .post-section {
   display: flex;
   flex-wrap: wrap;
@@ -249,5 +325,30 @@ span {
 
 a {
   text-decoration: none !important;
+}
+
+.filter-section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  margin: 50px;
+}
+.filter-section {
+  color: white;
+}
+
+#post-filter {
+  padding: 5px;
+  outline: none;
+  margin: 0 10px;
+}
+
+.post-option {
+  padding: 5px;
+}
+
+.filter-btn {
+  padding: 5px;
 }
 </style>
