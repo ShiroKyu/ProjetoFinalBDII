@@ -23,7 +23,7 @@
 
       <!-- {{ posts }} -->
 
-      <section class="post-section">
+      <section v-if="hasPosts" class="post-section">
         <div class="post-block" :key="index" v-for="(post, index) in posts">
           <h3 class="post-title">{{ post.titulo }}</h3>
           <hr />
@@ -42,6 +42,10 @@
           </p>
         </div>
       </section>
+
+      <section v-else class="post-section-void">
+        <h2>Nada aqui</h2>
+      </section>
     </div>
   </router-view>
 </template>
@@ -55,6 +59,7 @@ export default {
   data() {
     return {
       posts: [],
+      hasPosts: false,
     };
   },
 
@@ -97,6 +102,9 @@ export default {
     api.get('/post').then((response) => {
       if (response.status === 200) {
         this.$data.posts = response.data;
+        if (this.$data.posts.length > 0) {
+          this.hasPosts = true;
+        }
       }
     });
   },
@@ -193,13 +201,18 @@ export default {
   font-family: 'Quicksand', sans-serif;
 }
 
+.post-section-void {
+  font-family: 'Quicksand', sans-serif;
+  text-align: center;
+}
+
 .post-block {
   padding: 20px;
   margin: 10px;
   /*background-color: #ff00005c;*/
   background-color: #1b141f6b;
   width: 300px;
-  height: auto;
+  max-height: 400px;
   border-radius: 10px;
 
   transition: transform 0.7s ease;

@@ -78,10 +78,6 @@ export default {
         .post('/auth/checklogin', { email, token })
         .then((response) => {
           if (response.status === 200) {
-            // this.$store.dispatch({
-            //   type: 'updateToken',
-            //   token,
-            // });
             this.$router.push({ path: '/home' });
           }
         })
@@ -97,7 +93,6 @@ export default {
 .login-cover {
   width: 50%;
   height: 100%;
-  /* background-color: #6c63ff; */
   background-image: url('../../public/img/undraw_authentication_fsn5.svg');
   background-size: 70%;
   background-repeat: no-repeat;
