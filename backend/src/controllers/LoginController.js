@@ -80,7 +80,6 @@ class LoginController {
 
       return res.status(200).json({ token });
     } catch (e) {
-      console.log(e);
       return res.status(401).json({ error: e });
     }
   }
@@ -98,7 +97,7 @@ class LoginController {
         where: { matricula },
       });
       if (!student)
-        return res.status(401).json({ err: 'A matrícula não existe' });
+        return res.status(401).json({ error: 'A matrícula não existe' });
 
       const { id } = student;
 
@@ -120,6 +119,7 @@ class LoginController {
             .status(401)
             .json({ error: 'O usuário com essa matrícula já existe' });
       }
+
       return res.status(401).json({ err: e });
     }
   }

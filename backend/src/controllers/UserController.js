@@ -2,6 +2,7 @@ import User from '../models/User';
 import Student from '../models/Student';
 import Curso from '../models/Curso';
 import Foto from '../models/Foto';
+import Post from '../models/Post';
 
 class UserController {
   async store(req, res) {
@@ -82,12 +83,33 @@ class UserController {
         Fotos,
       } = user;
 
-      const foto = Fotos[Fotos.length - 1];
-      const { url, filename } = foto;
+      if (Fotos.length !== 0) {
+        const foto = Fotos[Fotos.length - 1];
+        const { url, filename } = foto;
+
+        const curso = await Curso.findByPk(curso_id);
+
+        const { nome: nome_curso } = curso;
+
+        const posts = await Post.find({ email });
+
+        return res.status(200).json({
+          nome,
+          email,
+          matricula,
+          situacao,
+          cota,
+          nome_curso,
+          posts,
+          Foto: { url, filename },
+        });
+      }
 
       const curso = await Curso.findByPk(curso_id);
 
       const { nome: nome_curso } = curso;
+
+      const posts = await Post.find({ email });
 
       return res.status(200).json({
         nome,
@@ -96,10 +118,10 @@ class UserController {
         situacao,
         cota,
         nome_curso,
-        Foto: { url, filename },
+        posts,
       });
     } catch (e) {
-      return res.status(400).json({ err: 'Houve um problema' });
+      return res.status(400).json({ error: e });
     }
   }
 
