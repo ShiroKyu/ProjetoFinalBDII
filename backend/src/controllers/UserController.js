@@ -146,8 +146,7 @@ class UserController {
     try {
       const user = await User.findByPk(req.params.id);
 
-      if (!user)
-        return res.status(401).json({ errors: ['Usuário não existe'] });
+      if (!user) return res.status(401).json({ error: ['Usuário não existe'] });
 
       await user.destroy();
 
