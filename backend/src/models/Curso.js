@@ -13,7 +13,6 @@ export default class Curso extends Model {
   static associate(models) {
     this.hasMany(models.Student, {
       foreignKey: 'curso_id',
-      as: 'curso_tem_aluno',
     });
   }
 }

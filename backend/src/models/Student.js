@@ -17,7 +17,8 @@ export default class Student extends Model {
   static associate(models) {
     this.belongsTo(models.Curso, {
       foreignKey: 'curso_id',
-      as: 'student_tem_curso',
     });
+
+    this.hasOne(models.User, { foreignKey: 'student_id' });
   }
 }

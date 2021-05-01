@@ -1,9 +1,18 @@
 import Student from '../models/Student';
+import User from '../models/User';
+import Curso from '../models/Curso';
 
 class StudentController {
   async index(req, res) {
     try {
-      const students = await Student.findAll();
+      const students = await Student.findAll({
+        attributes: ['id', 'nome', 'matricula', 'situacao', 'cota'],
+        order: [['id', 'ASC']],
+        include: [
+          { model: User, attributes: ['email'] },
+          { model: Curso, attributes: ['nome'] },
+        ],
+      });
 
       if (!students)
         return res

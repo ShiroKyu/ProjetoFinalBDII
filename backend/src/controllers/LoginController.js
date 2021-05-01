@@ -46,8 +46,7 @@ class LoginController {
       const user = await User.findOne({
         where: { email },
         include: {
-          association: 'user_tem_matricula',
-          attributes: ['nome', 'matricula', 'situacao', 'cota', 'curso_id'],
+          model: Student,
         },
       });
 

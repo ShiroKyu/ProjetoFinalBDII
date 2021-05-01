@@ -28,7 +28,6 @@ class UserController {
 
       return res.status(200).json({ userId, email, matricula });
     } catch (e) {
-      // throw new Error(e);
       return res.status(400).json({ err: 'Houve um problema' });
     }
   }
@@ -36,26 +35,17 @@ class UserController {
   async index(req, res) {
     try {
       const users = await User.findAll({
-        attributes: ['id', 'email', 'student_id'],
+        attributes: ['id', 'email'],
         include: [
-          {
-            association: 'user_tem_matricula',
-            attributes: ['nome', 'matricula', 'situacao', 'cota', 'curso_id'],
-          },
           {
             model: Foto,
           },
         ],
       });
 
-      if (!users)
-        return res
-          .status(400)
-          .json({ msg: 'Não existem registros de usuários.' });
-
       return res.status(200).json(users);
     } catch (e) {
-      throw new Error(e);
+      return res.status(400).json({ error: e });
     }
   }
 
@@ -66,8 +56,7 @@ class UserController {
         attributes: ['id', 'email', 'student_id'],
         include: [
           {
-            association: 'user_tem_matricula',
-            attributes: ['nome', 'matricula', 'situacao', 'cota', 'curso_id'],
+            model: Student,
           },
           {
             model: Foto,
@@ -79,7 +68,7 @@ class UserController {
 
       const {
         email,
-        user_tem_matricula: { nome, matricula, situacao, cota, curso_id },
+        Student: { nome, matricula, situacao, cota, curso_id },
         Fotos,
       } = user;
 
