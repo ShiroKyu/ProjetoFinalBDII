@@ -5,8 +5,9 @@
         <router-link class="back-link" to="/home"><a>&#8592; Voltar</a></router-link>
 
         <div class="profile-img-container">
-          <div class="profile-img"></div>
+          <img @click="mostrar" v-bind:src="profilePicUrl" alt="Profile pic" class="profile-img" />
         </div>
+
         <div class="student-info">
           <h2>Dados do estudante</h2>
           <p>
@@ -32,10 +33,11 @@
             <p>Alterar senha</p>
           </div>
 
-          <div class="update-profilepic">
+          <form class="update-profilepic" @submit.prevent="updateProfilePic">
             <img class="cadeado" width="30" height="30" src="../../public/img/camera-retro.png" />
-            <p>Atualizar foto de perfil</p>
-          </div>
+            <input id="upload-img" name="foto" type="file" placeholder="Atualizar foto de perfil" />
+            <button type="submit">Enviar</button>
+          </form>
         </div>
       </section>
 
@@ -69,12 +71,53 @@ export default {
     return {
       informacoes_perfil: {},
       hasPosts: false,
+      profilePicUrl: '',
     };
   },
 
   setup() {
     const toast = useToast();
     return { toast };
+  },
+
+  methods: {
+    updateProfilePic() {
+      const email = localStorage.getItem('email');
+
+      const formData = new FormData();
+      const foto = document.querySelector('#upload-img');
+
+      formData.append('foto', foto.files[0]);
+      formData.append('email', email);
+
+      api
+        .post('/foto', formData, {
+          headers: {
+            'Content-Type': `multipart/form-data; boundary=${formData._boundary}`,
+          },
+        })
+        .then(() => {
+          this.fetchFoto();
+        });
+    },
+
+    fetchFoto() {
+      const email = localStorage.getItem('email');
+
+      api
+        .get(`/user/${email}`)
+        .then((response) => {
+          if (!response.data.Foto) this.$data.profilePicUrl = 'img/undraw_female_avatar_w3jk.svg';
+          else this.$data.profilePicUrl = `http://${response.data.Foto.url}`;
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    },
+
+    mostrar(e) {
+      console.log(e.target.src);
+    },
   },
 
   created() {
@@ -112,6 +155,8 @@ export default {
       .catch((e) => {
         console.log(e);
       });
+
+    this.fetchFoto();
   },
 };
 </script>
@@ -209,7 +254,7 @@ export default {
 }
 
 .profile-img {
-  background-image: url('../../public/img/undraw_female_avatar_w3jk.svg');
+  /* background-image: url('../../public/img/undraw_female_avatar_w3jk.svg'); */
   background-size: cover;
   background-repeat: no-repeat;
   width: 100%;
@@ -249,6 +294,10 @@ export default {
   transition: transform 0.5s ease;
 }
 
+.update-profilepic {
+  width: 240px;
+}
+
 .cadeado {
   margin-right: 12px;
 }
@@ -262,7 +311,11 @@ export default {
 
 .update-profilepic:hover,
 .update-password:hover {
-  transform: translateX(20px);
+  transform: translateY(-20px);
+}
+
+.upload-img {
+  background: none;
 }
 
 .post-section {
@@ -283,6 +336,7 @@ export default {
   padding: 10px;
 
   border-radius: 5px;
+  overflow-y: auto;
 }
 
 .post-title {

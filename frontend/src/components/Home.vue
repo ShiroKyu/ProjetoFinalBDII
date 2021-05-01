@@ -19,19 +19,19 @@
         </nav>
       </header>
 
-      <h1 class="alter-post" @click="showPosts">Posts</h1>
+      <h1 class="alter-post">Posts</h1>
 
       <form class="filter-section" method="GET" @submit.prevent="filterPosts">
         <label for="post-filter">Filtrar: </label>
 
         <select name="post-filter" id="post-filter" v-model="email">
-          <option class="post-option"></option>
           <option class="post-option" :key="index" v-for="(user, index) in users">
             {{ user }}
           </option>
         </select>
 
         <button class="filter-btn" type="submit">Filtrar</button>
+        <button class="reset-btn" type="button" @click="resetPosts">Resetar</button>
       </form>
 
       <section v-if="hasPosts && !email" class="post-section">
@@ -134,7 +134,7 @@ export default {
 
           if (this.$data.posts.length > 0) {
             this.hasPosts = true;
-          }
+          } else this.hasPosts = false;
         }
       });
     },
@@ -150,6 +150,10 @@ export default {
           }
         }
       });
+    },
+
+    resetPosts() {
+      this.getPosts();
     },
   },
 
@@ -348,7 +352,8 @@ a {
   padding: 5px;
 }
 
-.filter-btn {
+.filter-btn,
+.reset-btn {
   padding: 5px;
 }
 </style>
