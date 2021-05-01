@@ -11,7 +11,9 @@ import userRoutes from './routes/user';
 import authRoutes from './routes/auth';
 import postRoutes from './routes/post';
 import fotoRoutes from './routes/foto';
+import studentRoutes from './routes/student';
 import estadoRoutes from './routes/estado';
+import cursoRoutes from './routes/curso';
 
 const whiteList = ['http://localhost:8080', 'http://localhost:3333'];
 
@@ -45,8 +47,9 @@ class App {
     this.app.use('/post', postRoutes);
     this.app.use('/estado', estadoRoutes);
     this.app.use('/foto', fotoRoutes);
+    this.app.use('/curso', cursoRoutes);
+    this.app.use('/student', studentRoutes);
   }
 }
 
 export default new App().app;
-// module.exports = new App().app;

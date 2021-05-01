@@ -17,20 +17,26 @@ class FotoController {
 
       try {
         const { originalname, filename } = req.file;
-        const { user_id } = req.body;
+
+        const { email } = req.body;
+
+        const user = await User.findOne(
+          { where: { email } },
+          {
+            include: {
+              model: Foto,
+            },
+          }
+        );
+
+        const { id: user_id } = user;
 
         const foto = await Foto.create({ originalname, filename, user_id });
 
-        const user = await User.findByPk(user_id, {
-          include: {
-            model: Foto,
-          },
-        });
-
-        return res.json(user);
+        return res.json(foto);
       } catch (e) {
         return res.status(400).json({
-          erros: ['Aluno não existe'],
+          errors: e,
         });
       }
     });
