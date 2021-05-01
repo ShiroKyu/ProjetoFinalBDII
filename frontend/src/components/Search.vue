@@ -23,9 +23,9 @@
 
       <!-- Filtro de cursos -->
       <form class="filter-section" method="GET" @submit.prevent="filterCourse">
-        <label for="course-filter">Filtrar: </label>
+        <label for="course-filter">Curso: </label>
 
-        <select name="course-filter" id="course-filter" v-model="email">
+        <select name="course-filter" id="course-filter" v-model="cursoAtual">
           <option class="course-option" :key="index" v-for="(curso, index) in cursos">
             {{ curso.nome }}
           </option>
@@ -36,47 +36,25 @@
 
       <!-- Filtro de situação -->
       <form class="filter-section situacao" method="GET" @submit.prevent="filterSituacao">
-        <label for="situacao-filter">Filtrar: </label>
+        <label for="situacao-filter">Situação: </label>
 
-        <select name="situacao-filter" id="situacao-filter" v-model="email">
-          <option class="situacao-option">Matrículado</option>
-          <option class="situacao-option">Transferido externo</option>
+        <select name="situacao-filter" id="situacao-filter" v-model="situacaoAtual">
+          <option class="situacao-option">Matriculado</option>
+          <option class="situacao-option">Transferido Externo</option>
           <option class="situacao-option">Concluído</option>
         </select>
 
         <button class="filter-btn" type="submit">Filtrar</button>
       </form>
 
-      <section v-if="hasPosts" class="user-section">
-        <div class="user-block" :key="index" v-for="(user, index) in users">
-          <h3 class="user-title">{{ user.titulo }}</h3>
+      <section class="user-section">
+        <div class="user-block" :key="index" v-for="(student, index) in students">
+          <h3 class="user-nome">{{ student.nome }}</h3>
           <hr />
-          <p class="user-desc">
-            {{ user.descricao }}
-          </p>
-          <p class="user-author">
-            Autor: <span>{{ user.email }}</span>
-          </p>
-        </div>
-      </section>
-
-      <section v-if="hasPosts && email" class="post-section">
-        <div class="post-block" :key="index" v-for="(post, index) in posts">
-          <h3 class="post-title">{{ post.titulo }}</h3>
-          <hr />
-          <p class="post-desc">
-            {{ post.descricao }}
-          </p>
-          <p class="post-author">
-            Autor: <span>{{ post.email }}</span>
-          </p>
-          <p class="post-date">
-            Data e hora da publicação:<br />
-            <span
-              >{{ new Date(post.data).toLocaleDateString() }}
-              {{ new Date(post.data).toLocaleTimeString() }}</span
-            >
-          </p>
+          <p class="user-email">Matrícula: {{ student.matricula }}</p>
+          <p class="user-email">Curso: {{ student.Curso.nome }}</p>
+          <p class="user-matricula">Cota: {{ student.cota }}</p>
+          <p class="user-matricula">Situação: {{ student.situacao }}</p>
         </div>
       </section>
     </div>
@@ -92,8 +70,9 @@ export default {
   data() {
     return {
       cursos: [],
-      users: [],
-
+      cursoAtual: '',
+      situacaoAtual: '',
+      students: [],
       email: '',
     };
   },
@@ -114,19 +93,32 @@ export default {
       });
     },
 
-    getUsers() {
+    filterSituacao() {
       const vue = this;
       api
-        .get('/user/')
+        .get('/student/')
         .then((response) => {
-          vue.users = response.data;
+          vue.students = response.data;
+
+          vue.students = vue.students.filter((student) => student.situacao === vue.situacaoAtual);
         })
         .catch((e) => {
           console.log(e);
         });
     },
 
-    filterSituacao() {},
+    filterCourse() {
+      const vue = this;
+      api
+        .get('/student/')
+        .then((response) => {
+          vue.students = response.data;
+          vue.students = vue.students.filter((student) => student.Curso.nome === vue.cursoAtual);
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    },
   },
 
   created() {
@@ -239,7 +231,7 @@ export default {
   text-decoration: underline;
 }
 
-.post-section {
+.user-section {
   display: flex;
   flex-wrap: wrap;
 
@@ -251,46 +243,42 @@ export default {
   font-family: 'Quicksand', sans-serif;
 }
 
-.post-section-void {
+.user-section-void {
   font-family: 'Quicksand', sans-serif;
   text-align: center;
 }
 
-.post-block {
+.user-block {
   padding: 20px;
   margin: 10px;
   /*background-color: #ff00005c;*/
   background-color: #1b141f6b;
   width: 300px;
-  max-height: 400px;
+  max-height: 300px;
   border-radius: 10px;
 
   transition: transform 0.7s ease;
 }
 
-.post-block:hover {
+.user-block:hover {
   transform: scale(1.05);
 }
 
-.post-title,
-.post-desc,
-.post-time,
-.post-date {
+.user-nome,
+.user-email,
+.user-matricula {
   margin: 10px auto;
 }
 
-.post-title {
+.user-nome {
   color: #ffffff;
 }
 
-.post-desc {
-  background-color: white;
-  border-radius: 5px;
-  padding: 10px;
+.user-email,
+.user-matricula {
+  color: #ffffff;
 
-  max-height: 200px;
-
-  overflow-y: auto;
+  margin: 10px auto;
 }
 
 span {
@@ -320,7 +308,7 @@ a {
   margin: 0 10px;
 }
 
-.post-option {
+.situacao-option {
   padding: 5px;
 }
 

@@ -107,8 +107,10 @@ export default {
       api
         .get(`/user/${email}`)
         .then((response) => {
-          if (!response.data.Foto) this.$data.profilePicUrl = 'img/undraw_female_avatar_w3jk.svg';
-          else this.$data.profilePicUrl = `http://${response.data.Foto.url}`;
+          if (!response.data.Foto) {
+            const profImg = document.querySelector('.profile-img');
+            profImg.src = 'img/undraw_female_avatar_w3jk.svg';
+          } else this.$data.profilePicUrl = `http://${response.data.Foto.url}`;
         })
         .catch((e) => {
           console.log(e);
@@ -260,8 +262,14 @@ export default {
   width: 100%;
   height: 100%;
 
-  box-shadow: 2px 2px 6px black;
   border-radius: 50%;
+
+  transition: all 0.5s ease;
+}
+
+.profile-img:hover {
+  transform: translateX(20px);
+  box-shadow: 2px 2px 6px black;
 }
 
 .update-section {
@@ -311,7 +319,7 @@ export default {
 
 .update-profilepic:hover,
 .update-password:hover {
-  transform: translateY(-20px);
+  transform: translateY(-5px);
 }
 
 .upload-img {
