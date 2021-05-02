@@ -36,7 +36,7 @@
           <form class="update-profilepic" @submit.prevent="updateProfilePic">
             <img class="cadeado" width="30" height="30" src="../../public/img/camera-retro.png" />
             <input id="upload-img" name="foto" type="file" placeholder="Atualizar foto de perfil" />
-            <button type="submit">Enviar</button>
+            <button id="upload-img-enviar" type="submit">Enviar</button>
           </form>
         </div>
       </section>
@@ -321,11 +321,18 @@ export default {
 .update-password:hover {
   transform: translateY(-5px);
 }
-
-.upload-img {
+#upload-img {
   background: none;
+  cursor: pointer;
 }
-
+#upload-img-enviar {
+  background-color: #ffc0cb;
+  border-radius: 5px;
+  border: none;
+  padding: 3px;
+  margin: 1px;
+  cursor: pointer;
+}
 .post-section {
   margin: 30px 0;
 

@@ -306,6 +306,12 @@ a {
   padding: 5px;
   outline: none;
   margin: 0 10px;
+  background-color: #5d26c1;
+  color: #fff;
+  font-size: 15px;
+  border-radius: 5px;
+  border-style: none;
+  cursor: pointer;
 }
 
 .situacao-option {
@@ -314,6 +320,11 @@ a {
 
 .filter-btn,
 .reset-btn {
+  color: white;
   padding: 5px;
+  background-color: #7303c0;
+  border-radius: 5px;
+  border: 2px solid #333333;
+  cursor: pointer;
 }
 </style>
