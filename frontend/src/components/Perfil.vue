@@ -5,7 +5,7 @@
         <router-link class="back-link" to="/home"><a>&#8592; Voltar</a></router-link>
 
         <div class="profile-img-container">
-          <img @click="mostrar" v-bind:src="profilePicUrl" alt="Profile pic" class="profile-img" />
+          <img v-bind:src="profilePicUrl" alt="Profile pic" class="profile-img" />
         </div>
 
         <div class="student-info">
@@ -43,13 +43,21 @@
 
       <section class="right-section">
         <h2>Seus posts</h2>
-
         <section v-if="hasPosts" class="post-section">
           <div class="post-block" :key="index" v-for="(post, index) in informacoes_perfil.posts">
             <h3 class="post-title">{{ post.titulo }}</h3>
             <hr />
+
             <p class="post-desc">
               {{ post.descricao }}
+              <img
+                @click="delPost"
+                class="del-icon"
+                src="../../public/img/delete.png"
+                width="20"
+                height="20"
+                v-bind:id="informacoes_perfil.posts[index]._id"
+              />
             </p>
           </div>
         </section>
@@ -117,8 +125,21 @@ export default {
         });
     },
 
-    mostrar(e) {
-      console.log(e.target.src);
+    delPost(e) {
+      const postId = e.target.getAttribute('id');
+
+      api.delete(`/post/${postId}`);
+
+      const email = localStorage.getItem('email');
+
+      api.get(`/user/${email}`).then((response) => {
+        this.$data.informacoes_perfil = response.data;
+        if (this.$data.informacoes_perfil.posts.length > 0) {
+          this.hasPosts = true;
+        }
+      });
+
+      this.fetchFoto();
     },
   },
 
@@ -362,5 +383,12 @@ export default {
   padding: 5px 0;
 
   overflow-x: auto;
+
+  display: flex;
+  justify-content: space-between;
+}
+
+.del-icon {
+  cursor: pointer;
 }
 </style>
