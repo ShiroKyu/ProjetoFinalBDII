@@ -1,18 +1,21 @@
-/* eslint-disable consistent-return */
 import jwt from 'jsonwebtoken';
 import { ValidationError } from 'sequelize';
 import User from '../models/User';
 import Student from '../models/Student';
-// import Curso from '../models/Curso';
 
 import redisClient from '../database/redis';
 
 class LoginController {
   async checkLogin(req, res) {
     try {
-      redisClient.get(req.body.email, async (err, reply) => {
+      const { token: reqToken, email: reqEmail } = req.body;
+
+      redisClient.get(reqEmail, async (err, reply) => {
         if (reply !== null) {
           const { token } = JSON.parse(reply.toString());
+
+          if (reqToken !== token)
+            return res.status(401).json({ valido: false });
 
           const dados = jwt.verify(token, process.env.TOKEN_SECRET);
           const { email } = dados;
@@ -20,18 +23,6 @@ class LoginController {
           if (req.body.email === email)
             return res.status(200).json({ valido: true });
         }
-        console.log('Pasei aq');
-        const { token, email: reqEmail } = req.body;
-
-        if (!token && !reqEmail)
-          return res.status(401).json({ error: 'Email e token não inclusos' });
-
-        const dados = jwt.verify(token, process.env.TOKEN_SECRET);
-        const { email } = dados;
-
-        if (reqEmail === email) return res.status(200).json({ valido: true });
-
-        return res.status(401).json({ errors: ['Token expirado ou inválido'] });
       });
     } catch (e) {
       return res.status(401).json({ errors: e });
@@ -65,15 +56,6 @@ class LoginController {
           error: 'Senha incorreta',
         });
       }
-
-      // const {
-      //   id,
-      //   user_tem_matricula: { nome, matricula, situacao, cota, curso_id },
-      // } = user;
-
-      // const curso = await Curso.findByPk(curso_id);
-
-      // const { nome: nomeCurso } = curso;
 
       const token = jwt.sign({ email }, process.env.TOKEN_SECRET, {
         expiresIn: process.env.TOKEN_EXPIRATION,
@@ -113,7 +95,6 @@ class LoginController {
 
       return res.status(200).json(user);
     } catch (e) {
-      console.log(e);
       if (e instanceof ValidationError) {
         if (e.errors[0].path === 'email')
           return res.status(401).json({ error: 'O email já existe' });

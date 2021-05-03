@@ -1,4 +1,3 @@
-/* eslint-disable consistent-return */
 import Post from '../models/Post';
 
 class PostController {
@@ -30,34 +29,19 @@ class PostController {
     }
   }
 
-  // async show(req, res) {
-  //   try {
+  async delete(req, res) {
+    try {
+      const { id } = req.params;
 
-  //     return res.status(200).json(user);
-  //   } catch (e) {
-  //     return res.status(400).json({ err: 'Houve um problema' });
-  //   }
-  // }
+      await Post.deleteOne({ _id: id });
 
-  // async update(req, res) {
-  //   try {
-
-  //     return res.status(200).json({ id, name, email });
-  //   } catch (e) {
-  //     throw new Error(e);
-  //   }
-  // }
-
-  // async delete(req, res) {
-  //   try {
-
-  //     return res.status(200).json({ msg: 'Usuário deletado com sucesso.' });
-  //   } catch (e) {
-  //     return res.status(400).json({
-  //       error: e.errors,
-  //     });
-  //   }
-  // }
+      return res.status(200).json({ msg: 'Post deletado com sucesso.' });
+    } catch (e) {
+      return res.status(400).json({
+        error: e.errors,
+      });
+    }
+  }
 }
 
 export default new PostController();
