@@ -276,7 +276,6 @@ export default {
   justify-content: center;
 
   width: 100%;
-  height: 100%;
 
   font-family: 'Quicksand', sans-serif;
 }

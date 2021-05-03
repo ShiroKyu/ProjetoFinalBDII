@@ -51,10 +51,18 @@
         <div class="user-block" :key="index" v-for="(student, index) in students">
           <h3 class="user-nome">{{ student.nome }}</h3>
           <hr />
-          <p class="user-email">Matrícula: {{ student.matricula }}</p>
-          <p class="user-email">Curso: {{ student.Curso.nome }}</p>
-          <p class="user-matricula">Cota: {{ student.cota }}</p>
-          <p class="user-matricula">Situação: {{ student.situacao }}</p>
+          <p class="user-email"><u>Matrícula</u>: {{ student.matricula }}</p>
+          <p class="user-email"><u>Curso</u>: {{ student.Curso.nome }}</p>
+          <p class="user-matricula"><u>Situação</u>: {{ student.situacao }}</p>
+          <p class="user-matricula"><u>Municipio</u>: {{ student.municipio }}</p>
+          <svg
+            v-bind:viewBox="students[index].municipioViewBox"
+            stroke="rgb(139,0,139)"
+            stroke-width="0.001"
+            class="svg-municipio"
+          >
+            <path fill="rgb(0,154,250)" v-bind:d="students[index].municipioSvg" />
+          </svg>
         </div>
       </section>
     </div>
@@ -74,6 +82,7 @@ export default {
       situacaoAtual: '',
       students: [],
       email: '',
+      municipio: '',
     };
   },
 
@@ -83,6 +92,13 @@ export default {
   },
 
   methods: {
+    deslogar() {
+      localStorage.removeItem('email');
+      localStorage.removeItem('token');
+
+      this.$router.push({ path: '/' });
+    },
+
     getCursos() {
       const vue = this;
 
@@ -101,6 +117,7 @@ export default {
           vue.students = response.data;
 
           vue.students = vue.students.filter((student) => student.situacao === vue.situacaoAtual);
+          vue.students = vue.students.map((student) => this.getSvgAndViewBox(student));
         })
         .catch((e) => {
           console.log(e);
@@ -114,10 +131,27 @@ export default {
         .then((response) => {
           vue.students = response.data;
           vue.students = vue.students.filter((student) => student.Curso.nome === vue.cursoAtual);
+
+          // eslint-disable-next-line array-callback-return
+          vue.students = vue.students.map((student) => this.getSvgAndViewBox(student));
         })
         .catch((e) => {
           console.log(e);
         });
+    },
+
+    getSvgAndViewBox(student) {
+      // Pegar a viewbox
+      api.get(`/municipio/getViewBox/${student.municipio}`).then((res) => {
+        student.municipioViewBox = res.data[0].getviewbox;
+      });
+
+      // Pegar o svg
+      api.get(`/municipio/getSvg/${student.municipio}`).then((res) => {
+        student.municipioSvg = res.data[0].st_assvg;
+      });
+
+      return student;
     },
   },
 
@@ -238,7 +272,6 @@ export default {
   justify-content: center;
 
   width: 100%;
-  height: 100%;
 
   font-family: 'Quicksand', sans-serif;
 }
@@ -254,7 +287,7 @@ export default {
   /*background-color: #ff00005c;*/
   background-color: #1b141f6b;
   width: 300px;
-  max-height: 300px;
+  /* max-height: 300px; */
   border-radius: 10px;
 
   transition: transform 0.7s ease;
@@ -262,6 +295,11 @@ export default {
 
 .user-block:hover {
   transform: scale(1.05);
+}
+
+.svg-municipio {
+  height: 200px;
+  width: 100%;
 }
 
 .user-nome,
@@ -306,16 +344,19 @@ a {
   padding: 5px;
   outline: none;
   margin: 0 10px;
-  background-color: #5d26c1;
-  color: #fff;
+  background-color: #1b141f6b;
   font-size: 15px;
   border-radius: 5px;
   border-style: none;
   cursor: pointer;
+
+  color: white;
 }
 
-.situacao-option {
-  padding: 5px;
+.situacao-option,
+.course-option {
+  margin: 10px;
+  background-color: rgba(72, 14, 95, 0.596);
 }
 
 .filter-btn,
