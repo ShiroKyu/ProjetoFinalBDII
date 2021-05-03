@@ -7,7 +7,7 @@ export default class Student extends Model {
         nome: Sequelize.STRING,
         matricula: Sequelize.STRING,
         situacao: Sequelize.STRING,
-        cota: Sequelize.STRING,
+        municipio: Sequelize.STRING,
         curso_id: Sequelize.INTEGER,
       },
       { sequelize }

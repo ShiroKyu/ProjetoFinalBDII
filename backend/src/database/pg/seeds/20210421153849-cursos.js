@@ -16,25 +16,22 @@ module.exports = {
           updated_at: new Date(),
         },
         {
-          nome: 
-            'Engenharia Civil - Cajazeiras (CAMPUS CAJAZEIRAS)',
+          nome: 'Engenharia Civil - Cajazeiras (CAMPUS CAJAZEIRAS)',
           created_at: new Date(),
           updated_at: new Date(),
         },
         {
-          nome: 
-            'Técnico em Informática - Cajazeiras (CAMPUS CAJAZEIRAS)',
+          nome: 'Técnico em Informática - Cajazeiras (CAMPUS CAJAZEIRAS)',
           created_at: new Date(),
           updated_at: new Date(),
         },
         {
-          nome: 
-            'Licenciatura em Matemática - Cajazeiras (CAMPUS CAJAZEIRAS)',
+          nome: 'Licenciatura em Matemática - Cajazeiras (CAMPUS CAJAZEIRAS)',
           created_at: new Date(),
           updated_at: new Date(),
         },
         {
-          nome: 
+          nome:
             'Técnico em Edificações Subsequente - Cajazeiras (CAMPUS CAJAZEIRAS)',
           created_at: new Date(),
           updated_at: new Date(),

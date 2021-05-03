@@ -12,7 +12,7 @@ import authRoutes from './routes/auth';
 import postRoutes from './routes/post';
 import fotoRoutes from './routes/foto';
 import studentRoutes from './routes/student';
-import estadoRoutes from './routes/estado';
+import municipioRoutes from './routes/municipio';
 import cursoRoutes from './routes/curso';
 
 const whiteList = ['http://localhost:8080', 'http://localhost:3333'];
@@ -45,7 +45,7 @@ class App {
     this.app.use('/user', userRoutes);
     this.app.use('/auth', authRoutes);
     this.app.use('/post', postRoutes);
-    this.app.use('/estado', estadoRoutes);
+    this.app.use('/municipio', municipioRoutes);
     this.app.use('/foto', fotoRoutes);
     this.app.use('/curso', cursoRoutes);
     this.app.use('/student', studentRoutes);

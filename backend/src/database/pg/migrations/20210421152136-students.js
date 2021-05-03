@@ -20,16 +20,16 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      cota: {
-        type: Sequelize.STRING,
-        allowNull: true,
-      },
       curso_id: {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: { model: 'cursos', key: 'id' },
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE',
+      },
+      municipio: {
+        type: Sequelize.STRING,
+        allowNull: false,
       },
       created_at: {
         type: Sequelize.DATE,
